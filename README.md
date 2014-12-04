@@ -3,7 +3,7 @@ jLQNInterface
 
 jLQNInterface provides Java API to solve, analyze and manipulate Layered Qeueuing Network (LQN) models. A sample input model and an algorithm that finds bottlenecks and meets given response time objectives are included in the repository. 
 
-jLQNInterface depends on LQN Solver (LQNS), which needs to be installed on the system before jLQNInterface may be used.
+jLQNInterface depends on LQN Solver (LQNS), which needs to be installed on the system before jLQNInterface may be used. To run the program, a driver is provided in <tt>src/jLQNInterface/drivers/ca/appsimulations/jlqninterface/drivers/</tt> folder.
 
 The project is currently in development phase.
 
