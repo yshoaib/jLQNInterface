@@ -27,7 +27,7 @@ import ca.appsimulations.jlqninterface.core.Model;
 public class Driver {
 
 	public static void main(String[] args) {
-		Model workspace = new Model("./app.properties");
+		Model workspace = new Model("src/jLQNInterface/app.properties");
 		Algorithm alg = new Algorithm1(workspace);
 		alg.run();
 	}
