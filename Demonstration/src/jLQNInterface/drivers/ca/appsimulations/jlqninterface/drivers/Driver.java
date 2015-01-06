@@ -25,11 +25,29 @@ import ca.appsimulations.jlqninterface.algorithms.Algorithm1;
 import ca.appsimulations.jlqninterface.core.Model;
 
 public class Driver {
-
-	public static void main(String[] args) {
-		Model workspace = new Model("src/jLQNInterface/app.properties");
-		Algorithm alg = new Algorithm1(workspace);
+	private Algorithm alg;
+	
+	public Driver(Algorithm algorithm)
+	{
+		if(algorithm == null){
+			throw new IllegalArgumentException("Driver constructed with null parameters");
+		}
+	
+		alg = algorithm;
+	}
+	
+	public void executeAlgorithm()
+	{
 		alg.run();
+	}
+	
+	
+	public static void main(String[] args) {
+		Model m = new Model("src/jLQNInterface/app.properties");
+		Algorithm algorithm = new Algorithm1(m);
+		
+		Driver driver = new Driver(algorithm);
+		driver.executeAlgorithm();
 	}
 
 }
