@@ -7,6 +7,8 @@ jLQNInterface depends on LQN Solver (LQNS), which needs to be installed on the s
 
 The project is currently in development phase.
 
+For development, create a new Java Project in Eclipse and choose "Demonstration" folder under the jLQNInterface repository as the project root folder.
+
 <b>Publication:</b><br/>
 Y. Shoaib and O. Das, “Using layered bottlenecks for virtual machine provisioning in the clouds,” in Proceedings of the 2012 IEEE/ACM Fifth International Conference on Utility and Cloud Computing (UCC 2012), Chicago, IL, 5–8 Nov. 2012, pp.109–116. [Online]. Available: 
 http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6424935
