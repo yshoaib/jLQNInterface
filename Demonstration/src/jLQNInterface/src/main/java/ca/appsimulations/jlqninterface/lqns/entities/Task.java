@@ -10,11 +10,8 @@ package ca.appsimulations.jlqninterface.lqns.entities;
 
 import java.util.*;
 
-import javax.management.RuntimeErrorException;
-
 import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.utilities.Utility;
-import sun.reflect.generics.tree.ReturnType;
 
 public class Task extends TaskType {
 	private Processor processor;

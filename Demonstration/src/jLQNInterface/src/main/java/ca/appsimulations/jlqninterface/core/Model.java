@@ -9,8 +9,6 @@ package ca.appsimulations.jlqninterface.core;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityDef;
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityDefBase;

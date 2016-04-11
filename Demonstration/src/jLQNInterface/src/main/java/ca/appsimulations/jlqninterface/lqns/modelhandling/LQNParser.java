@@ -8,29 +8,20 @@ package ca.appsimulations.jlqninterface.lqns.modelhandling;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import ca.appsimulations.jlqninterface.core.Model;
 import org.xml.sax.helpers.*;
 import org.xml.sax.*;
 
-import ca.appsimulations.jlqninterface.core.Model;
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityDef;
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityDefBase;
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityPhases;
 import ca.appsimulations.jlqninterface.lqns.entities.Entry;
-import ca.appsimulations.jlqninterface.lqns.entities.EntryAcType;
-import ca.appsimulations.jlqninterface.lqns.entities.LQNConstants;
-import ca.appsimulations.jlqninterface.lqns.entities.LQNDefaults;
 import ca.appsimulations.jlqninterface.lqns.entities.Processor;
-import ca.appsimulations.jlqninterface.lqns.entities.ProcessorSchedulingType;
-import ca.appsimulations.jlqninterface.lqns.entities.SynchCall;
 import ca.appsimulations.jlqninterface.lqns.entities.Task;
 import ca.appsimulations.jlqninterface.lqns.entities.TaskActivities;
-import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
 import ca.appsimulations.jlqninterface.utilities.FileHandler;
 import ca.appsimulations.jlqninterface.utilities.Utility;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;

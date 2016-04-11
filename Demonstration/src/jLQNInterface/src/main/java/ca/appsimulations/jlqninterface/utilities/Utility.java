@@ -10,8 +10,6 @@ package ca.appsimulations.jlqninterface.utilities;
 
 import java.util.*;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.Debug;
-
 public class Utility {
 
 	public static String listToQutotationStrArray(List list) {

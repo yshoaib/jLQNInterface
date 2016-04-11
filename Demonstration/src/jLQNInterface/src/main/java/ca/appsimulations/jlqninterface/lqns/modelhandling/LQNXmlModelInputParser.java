@@ -1,9 +1,9 @@
 package ca.appsimulations.jlqninterface.lqns.modelhandling;
 
+import ca.appsimulations.jlqninterface.core.Model;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityDef;
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityPhases;
 import ca.appsimulations.jlqninterface.lqns.entities.EntryAcType;
@@ -21,12 +21,11 @@ import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
  * Some LQN classes and their members are outlined as UML class diagrams in LQNS User Manual.
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
-public class LQNXmlResultParser extends LQNParser {
+public class LQNXmlModelInputParser extends LQNParser {
 
-	public LQNXmlResultParser(Model workspace) {
+	public LQNXmlModelInputParser(Model workspace) {
 		super(workspace);
 	}
-	
 	
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -43,18 +42,10 @@ public class LQNXmlResultParser extends LQNParser {
 		String attrReplication = attributes.getValue(LQNXMLAttributes.REPLICATION.toString());
 
 		switch (et) {
-			case RESULT_GENERAL:
-
-				String attrValid = attributes.getValue(LQNXMLAttributes.VALID.toString());
-				workspace.getResult().setResultValid(attrValid);
-				break;
-				
 			case PROCESSOR:
-				
 				// name
 				curProcessor = workspace.getProcessorByName(attrName, true);
-				
-				/*
+
 				// scheduling
 				ProcessorSchedulingType psType = ProcessorSchedulingType.getValue(attrScheduling);
 				curProcessor.setScheduling(psType);
@@ -74,21 +65,20 @@ public class LQNXmlResultParser extends LQNParser {
 				} else if ((attrReplication == null)) {
 					curProcessor.setReplication(LQNDefaults.PROCESSOR_REPLICATION.getValue());
 				}
-				*/
 				break;
 			case RESULT_PROCESSOR:
-
+/*
 				// utilization
 				String attrUtilization = attributes.getValue(LQNXMLAttributes.UTILIZATION.toString());
 				float utilization = Float.parseFloat(attrUtilization);
 				curProcessor.getResult().setUtilization(utilization);
+				*/
 				break;
-			case TASK:
 				
+			case TASK:
 				// name
 				curTask = workspace.getTaskByName(attrName, curProcessor, true);
-				
-				/*
+
 				// scheduling
 				TaskSchedulingType schedulingType = TaskSchedulingType.getValue(attrScheduling);
 				curTask.setScheduling(schedulingType);
@@ -112,10 +102,10 @@ public class LQNXmlResultParser extends LQNParser {
 				} else if ((attrReplication == null)) {
 					curTask.setReplication(LQNDefaults.TASK_REPLICATION.getValue());
 				}
-				*/
-				
+
 				break;
 			case RESULT_TASK:
+				/*
 				attrUtilization = attributes.getValue(LQNXMLAttributes.UTILIZATION.toString());
 				String attrThroughput = attributes.getValue(LQNXMLAttributes.THROUGHPUT.toString());
 				String attrPh1Utilization = attributes.getValue(LQNXMLAttributes.PHASE1_UTILIZATION.toString());
@@ -136,15 +126,18 @@ public class LQNXmlResultParser extends LQNParser {
 				curTask.getResult().setUtilization(utilization);
 				curTask.getResult().setPhase1_utilization(ph1Utilization);
 				curTask.getResult().setProc_utilization(procUtilization);
+				*/
 				break;
+				
 			case ENTRY:
 				String attrType = attributes.getValue(LQNXMLAttributes.TYPE.toString());
 
 				// name,type
 				curEntry = workspace.getEntryByName(attrName, curTask, true);
-				//curEntry.setEntryType(EntryAcType.getValue(attrType));
+				curEntry.setEntryType(EntryAcType.getValue(attrType));
 				break;
 			case RESULT_ENTRY:
+				/*
 				attrUtilization = attributes.getValue(LQNXMLAttributes.UTILIZATION.toString());
 				attrThroughput = attributes.getValue(LQNXMLAttributes.THROUGHPUT.toString());
 				String attrSquaredCoeff = attributes.getValue(LQNXMLAttributes.SQUARED_COEFF_VARIATION.toString());
@@ -178,15 +171,17 @@ public class LQNXmlResultParser extends LQNParser {
 				curEntry.getResult().setUtilization(utilization);
 				curEntry.getResult().setSquared_coeff_variation(squaredCoeffVariation);
 				curEntry.getResult().setProc_utilization(procUtilization);
-
+				*/
+				
 				break;
+			
 			case ENTRY_PHASE_ACTIVITIES:
-				//curEntry.generateEntryPhaseActivities();
+				curEntry.generateEntryPhaseActivities();
 				isEntryPhaseActivities = true;
 				break;
 			case TASK_ACTIVITIES:
 				// TODO need to find task activity by name
-				//curTaskActivities = curTask.generateTaskActivities();
+				curTaskActivities = curTask.generateTaskActivities();
 				isTaskActivities = true;
 				break;
 			case ACTIVITY:
@@ -221,15 +216,14 @@ public class LQNXmlResultParser extends LQNParser {
 				// "\t\t taskName: " + curTask + "\t\t entryName: " + curEntry);
 
 				// host-demand-mean
-				
-				/*if (attrHostDemand != null) {
+				if (attrHostDemand != null) {
 					float hostDemand = Float.parseFloat(attrHostDemand);
 					curActivity.setHost_demand_mean(hostDemand);
 				}
-				*/
-				
+
 				break;
 			case RESULT_ACTIVITY:
+				/*
 				String attrProcWaiting = attributes.getValue(LQNXMLAttributes.PROC_WAITING.toString());
 				String attrServiceTime = attributes.getValue(LQNXMLAttributes.SERVICE_TIME.toString());
 				String attrServiceTimeVar = attributes.getValue(LQNXMLAttributes.SERVICE_TIME_VARIANCE.toString());
@@ -245,8 +239,9 @@ public class LQNXmlResultParser extends LQNParser {
 				curActivity.getResult().setService_time(serviceTime);
 				curActivity.getResult().setService_time_variance(serviceTimeVar);
 				curActivity.getResult().setUtilization(utilization);
-
+				*/
 				break;
+				
 			case SYNCH_CALL:
 				// dest, callsmean, fanin,fanout
 				String attrDest = attributes.getValue(LQNXMLAttributes.DEST.toString());
@@ -274,8 +269,7 @@ public class LQNXmlResultParser extends LQNParser {
 						ad.addSynchCall(s);
 					}
 				}
-				
-				/*
+
 				if (attrFanin != null) {
 					s.setFanin(Integer.parseInt(attrFanin));
 				}
@@ -283,7 +277,6 @@ public class LQNXmlResultParser extends LQNParser {
 				if (attrFanout != null) {
 					s.setFanout(Integer.parseInt(attrFanout));
 				}
-				*/
 
 				/*
 				 * String attrDest =
@@ -366,5 +359,4 @@ public class LQNXmlResultParser extends LQNParser {
 				break;
 		}
 	}
-
 }

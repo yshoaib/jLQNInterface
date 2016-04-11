@@ -8,23 +8,18 @@ package ca.appsimulations.jlqninterface.lqns.modelhandling;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
-import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.Attributes;
+import ca.appsimulations.jlqninterface.core.Model;
+import ca.appsimulations.jlqninterface.utilities.Utility;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import org.w3c.dom.*;
 
-import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.lqns.entities.ActivityPhases;
 import ca.appsimulations.jlqninterface.lqns.entities.Entry;
 import ca.appsimulations.jlqninterface.lqns.entities.Processor;
@@ -32,13 +27,8 @@ import ca.appsimulations.jlqninterface.lqns.entities.ProcessorSchedulingType;
 import ca.appsimulations.jlqninterface.lqns.entities.SynchCall;
 import ca.appsimulations.jlqninterface.lqns.entities.Task;
 import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
-import ca.appsimulations.jlqninterface.utilities.Utility;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeType;
 
 import java.io.*;
-import java.lang.annotation.ElementType;
-import java.text.Format;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;

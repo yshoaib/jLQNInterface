@@ -1,8 +1,6 @@
 package ca.appsimulations.jlqninterface.algorithms;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.io.*;
 
 import ca.appsimulations.jlqninterface.core.Model;
@@ -15,9 +13,12 @@ import ca.appsimulations.jlqninterface.lqns.entities.Processor;
 import ca.appsimulations.jlqninterface.lqns.entities.ProcessorSchedulingType;
 import ca.appsimulations.jlqninterface.lqns.entities.Task;
 import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
-import ca.appsimulations.jlqninterface.lqns.modelhandling.*;
 
+import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNModifier;
+import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlModelInputParser;
+import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlResultParser;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNSolver;
 
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation

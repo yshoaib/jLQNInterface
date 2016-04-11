@@ -8,8 +8,6 @@ package ca.appsimulations.jlqninterface.lqns.entities;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
-import java.util.EnumSet;
-
 public enum ProcessorSchedulingType {
 	FIFO("fcfs"), // First-in, first out (first-come, first-served). Tasks are
 	// served in the order in which they arrive.

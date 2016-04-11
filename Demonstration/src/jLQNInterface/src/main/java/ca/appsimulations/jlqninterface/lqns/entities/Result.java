@@ -1,7 +1,5 @@
 package ca.appsimulations.jlqninterface.lqns.entities;
 
-import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXMLAttributes;
-
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
  * 
