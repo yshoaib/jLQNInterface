@@ -12,9 +12,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.management.OperatingSystemMXBean;
 
 import ca.appsimulations.jlqninterface.lqns.entities.ResultTypes;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import javafx.application.Platform;
 
 public class LQNSolver {
 
@@ -27,6 +29,8 @@ public class LQNSolver {
 		// System.out.println(strCmd.toString());
 		Utility.debug("----Running Solver----");
 		String[] cmd = { "bash", "-c", "lqns " + inputPath };
+
+
 		try {
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();

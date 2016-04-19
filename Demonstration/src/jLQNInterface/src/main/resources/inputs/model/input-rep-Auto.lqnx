@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><lqn-model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" description="lqn2xml 5.4 solution for model from: input-rep.lqn." name="input-rep" xsi:noNamespaceSchemaLocation="/usr/local/share/lqns/lqn.xsd">
+   <solver-params comment="Test System - 10 users think 2 - no replication" conv_val="0.01" it_limit="50000" print_int="1" underrelax_coeff="0.9"/>
+   <processor name="pClient" scheduling="inf">
+      <task multiplicity="100" name="Browser" scheduling="ref">
+         <entry name="load" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="load_1" phase="1">
+                  <synch-call calls-mean="0.16666667" dest="funcA1"/>
+               <synch-call calls-mean="0.16666667" dest="funcA1_re1"/><synch-call calls-mean="0.16666667" dest="funcA1_re2"/><synch-call calls-mean="0.16666667" dest="funcA1_re3"/><synch-call calls-mean="0.16666667" dest="funcA1_re4"/><synch-call calls-mean="0.16666667" dest="funcA1_re5"/></activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor name="pTaskA" scheduling="ps">
+      <task multiplicity="10" name="TaskA" scheduling="fcfs">
+         <entry name="funcA1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor name="pTaskB" scheduling="ps">
+      <task multiplicity="10" name="TaskB" scheduling="fcfs">
+         <entry name="funcB1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="funcB1_1" phase="1">
+                  <synch-call calls-mean="0.5" dest="funcC1"/>
+               <synch-call calls-mean="0.5" dest="funcC1_re1"/></activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor multiplicity="5" name="pTaskC" scheduling="ps">
+      <task multiplicity="10" name="TaskC" scheduling="fcfs">
+         <entry name="funcC1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="5" name="funcC1_1" phase="1">
+                  <synch-call calls-mean="2" dest="funcD1"/>
+               </activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor multiplicity="6" name="pTaskD" scheduling="ps">
+      <task multiplicity="10" name="TaskD" scheduling="fcfs">
+         <entry name="funcD1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcD1_1" phase="1"/>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+<processor name="pTaskA_rp1" scheduling="ps"><task multiplicity="10" name="TaskA_rt1" scheduling="fcfs"><entry name="funcA1_re1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1_ra1" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskB_rp1" scheduling="ps"><task multiplicity="10" name="TaskB_rt1" scheduling="fcfs"><entry name="funcB1_re1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="funcB1_1_ra1" phase="1">
+                  <synch-call calls-mean="0.5" dest="funcC1"/>
+               <synch-call calls-mean="0.5" dest="funcC1_re1"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskA_rp2" scheduling="ps"><task multiplicity="10" name="TaskA_rt2" scheduling="fcfs"><entry name="funcA1_re2" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1_ra2" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskB_rp2" scheduling="ps"><task multiplicity="10" name="TaskB_rt2" scheduling="fcfs"><entry name="funcB1_re2" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="funcB1_1_ra2" phase="1">
+                  <synch-call calls-mean="0.5" dest="funcC1"/>
+               <synch-call calls-mean="0.5" dest="funcC1_re1"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskA_rp3" scheduling="ps"><task multiplicity="10" name="TaskA_rt3" scheduling="fcfs"><entry name="funcA1_re3" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1_ra3" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskB_rp3" scheduling="ps"><task multiplicity="10" name="TaskB_rt3" scheduling="fcfs"><entry name="funcB1_re3" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="funcB1_1_ra3" phase="1">
+                  <synch-call calls-mean="0.5" dest="funcC1"/>
+               <synch-call calls-mean="0.5" dest="funcC1_re1"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskA_rp4" scheduling="ps"><task multiplicity="10" name="TaskA_rt4" scheduling="fcfs"><entry name="funcA1_re4" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1_ra4" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskB_rp4" scheduling="ps"><task multiplicity="10" name="TaskB_rt4" scheduling="fcfs"><entry name="funcB1_re4" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="2" name="funcB1_1_ra4" phase="1">
+                  <synch-call calls-mean="0.5" dest="funcC1"/>
+               <synch-call calls-mean="0.5" dest="funcC1_re1"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor name="pTaskA_rp5" scheduling="ps"><task multiplicity="10" name="TaskA_rt5" scheduling="fcfs"><entry name="funcA1_re5" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="3" name="funcA1_1_ra5" phase="1">
+                  <synch-call calls-mean="0.6" dest="funcB1"/>
+               <synch-call calls-mean="0.6" dest="funcB1_re1"/><synch-call calls-mean="0.6" dest="funcB1_re2"/><synch-call calls-mean="0.6" dest="funcB1_re3"/><synch-call calls-mean="0.6" dest="funcB1_re4"/></activity>
+            </entry-phase-activities>
+         </entry></task></processor><processor multiplicity="5" name="pTaskC_rp1" scheduling="ps"><task multiplicity="10" name="TaskC_rt1" scheduling="fcfs"><entry name="funcC1_re1" type="PH1PH2">
+            <entry-phase-activities>
+               <activity host-demand-mean="5" name="funcC1_1_ra1" phase="1">
+                  <synch-call calls-mean="2" dest="funcD1"/>
+               </activity>
+            </entry-phase-activities>
+         </entry></task></processor><lqx/></lqn-model>

@@ -50,7 +50,7 @@ public class Algorithm1 extends Algorithm {
 		Utility.print("Initializing...");
 
 		workspace.resetAll();
-		// Workspace workspace = new Workspace("./app.properties");
+		// Workspace workspace = new Workspace("./application.properties");
 
 		Utility.debug("Parsing input file " + inputFilePath);
 		try {
@@ -133,7 +133,7 @@ public class Algorithm1 extends Algorithm {
 		Utility.debug("");
 
 		//update from in-memory representation of the model, output the updated model to outputFilePath
-		lqnmod.parseAndUpdateXML(lqnInputParser.getLQXCData(), inputFilePath, outputFilePath);
+		lqnmod.parseAndUpdateXML(lqnInputParser.getLQXCData(false), inputFilePath, outputFilePath);
 
 		boolean result = LQNSolver.solveLqns(outputFilePath, outputFilePath + ".result", lqnResultParser, xmlOutputFilePath);
 		if (result == false) {
@@ -595,7 +595,7 @@ public class Algorithm1 extends Algorithm {
 	}
 
 	@Override
-	public void run() {
+    public void run() {
 		String strMsg;
 		int addedVMs = 0;
 		int noChangesCount = 0;

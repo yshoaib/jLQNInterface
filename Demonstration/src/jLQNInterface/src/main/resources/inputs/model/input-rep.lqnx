@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <lqn-model name="input-rep" description="lqn2xml 5.4 solution for model from: input-rep.lqn." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/usr/local/share/lqns/lqn.xsd">
-   <solver-params comment="Test System - 10 users think 2 - no replication" conv_val="0.01" it_limit="5000" underrelax_coeff="0.9" print_int="1"/>
+   <solver-params comment="Test System - 10 users think 2 - no replication" conv_val="0.01" it_limit="50000" underrelax_coeff="0.9" print_int="1"/>
    <processor name="pClient" scheduling="inf">
       <task name="Browser" scheduling="ref" multiplicity="100">
          <entry name="load" type="PH1PH2">
