@@ -22,8 +22,11 @@ public class ConfigurationService {
 	@Value("${inputFilePath}")
 	private String inputFilePath;
 
-	@Value("${outputFilePath}")
-	private String outputFilePath;
+	@Value("${autoInputFileName}")
+	private String autoInputFilePath;
+
+	@Value("${lqnXmlOutputFileName}")
+	private String lqnXmlOutputFilePath;
 
 	@Value("${responseTimeObjective}")
 	private double responseTimeObjective;
@@ -40,9 +43,6 @@ public class ConfigurationService {
 	@Value("${satThreshold}")
 	private double satThreshold;
 
-	@Value("${lqnXmlOutputFilePath}")
-	private String lqnXmlOutputFilePath;
-
 	@Value("${bottleneckMaxBStrengthTaskOnly}")
 	private boolean bottleneckMaxBStrengthTaskOnly;
 
@@ -52,24 +52,31 @@ public class ConfigurationService {
 	{
 		ClassPathResource inputFileResource = new ClassPathResource(inputFilePath);
 		if(!inputFileResource.exists()){
-			throw new FileNotFoundException(inputFileResource.getPath() + "does not exist");
+			throw new FileNotFoundException(inputFileResource.getPath() + " does not exist");
 		}
 		this.inputFilePath = inputFileResource.getFile().getAbsolutePath();
 
-		ClassPathResource outputFileResource = new ClassPathResource(outputFilePath);
-		if(!outputFileResource.exists())
+		this.autoInputFilePath= inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + autoInputFilePath;
+		ClassPathResource autoInputFileResource = new ClassPathResource(autoInputFilePath);
+		if(autoInputFileResource.exists())
 		{
-			throw new FileNotFoundException(outputFileResource.getPath() + "does not exist");
+			autoInputFileResource.getFile().delete();
 		}
-		this.outputFilePath = outputFileResource.getFile().getAbsolutePath();
+
+		this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + lqnXmlOutputFilePath;
+		ClassPathResource lqnXmlOutputFileResource = new ClassPathResource(lqnXmlOutputFilePath);
+		if(lqnXmlOutputFileResource.exists())
+		{
+			lqnXmlOutputFileResource.getFile().delete();
+		}
 	}
 
 	public String getInputFilePath() {
 		return inputFilePath;
 	}
 
-	public String getOutputFilePath() {
-		return outputFilePath;
+	public String getAutoInputFilePath() {
+		return autoInputFilePath;
 	}
 
 	public double getResponseTimeObjective() {

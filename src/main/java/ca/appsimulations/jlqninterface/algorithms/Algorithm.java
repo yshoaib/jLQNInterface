@@ -30,7 +30,7 @@ public abstract class Algorithm {
 		this.maxProcsPerVM = workspace.getMaxProcsPerVM();
 		this.spareVMs = workspace.getSpareVMs();
 		this.inputFilePath = workspace.getInputFilePath();
-		this.outputFilePath = workspace.getOutputFilePath();
+		this.outputFilePath = workspace.getAutoInputFilePath();
 		this.xmlOutputFilePath = workspace.getLqnXmlOutputFilePath();
 
 	}

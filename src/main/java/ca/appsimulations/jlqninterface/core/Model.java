@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-//this class was previously named "workspace"
 @Component
 public class Model {
 	private ArrayList<Task> tasks;
@@ -25,7 +24,7 @@ public class Model {
 	private ArrayList<Processor> processors;
 	private ArrayList<ActivityDefBase> activities;
 	private String inputFilePath;
-	private String outputFilePath;
+	private String autoInputFilePath;
 	private String lqnXmlOutputFilePath;
 	private double responseTimeObjective;
 	private int maxVMReplicas;
@@ -46,7 +45,7 @@ public class Model {
 		processors = new ArrayList<Processor>();
 		activities = new ArrayList<ActivityDefBase>();
 		inputFilePath = configurationService.getInputFilePath();
-		outputFilePath = configurationService.getOutputFilePath();
+		autoInputFilePath = configurationService.getAutoInputFilePath();
 		lqnXmlOutputFilePath = configurationService.getLqnXmlOutputFilePath();
 		responseTimeObjective = configurationService.getResponseTimeObjective();
 		maxVMReplicas = configurationService.getMaxVMReplicas();
@@ -341,8 +340,8 @@ public class Model {
 		return inputFilePath;
 	}
 
-	public String getOutputFilePath() {
-		return outputFilePath;
+	public String getAutoInputFilePath() {
+		return autoInputFilePath;
 	}
 
 	public String getLqnXmlOutputFilePath() {
