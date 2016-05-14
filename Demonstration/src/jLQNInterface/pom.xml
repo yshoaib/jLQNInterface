@@ -58,7 +58,7 @@
                         <archive>
                             <manifest>
                                 <addClasspath>true</addClasspath>
-                                <mainClass>ca.appsimulations.jlqninterface.drivers.Driver</mainClass>
+                                <mainClass>ca.appsimulations.jlqninterface.Application</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
@@ -68,7 +68,7 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>1.2.1</version>
                     <configuration>
-                        <mainClass>ca.appsimulations.jlqninterface.drivers.Driver</mainClass>
+                        <mainClass>ca.appsimulations.jlqninterface.drivers.Application</mainClass>
                     </configuration>
                 </plugin>
             </plugins>
