@@ -1,24 +1,19 @@
 package ca.appsimulations.jlqninterface.algorithms;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.io.*;
-
 import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.lqns.algorithms.BottleneckIdentifier;
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityPhases;
-import ca.appsimulations.jlqninterface.lqns.entities.Entity;
-import ca.appsimulations.jlqninterface.lqns.entities.Entry;
-import ca.appsimulations.jlqninterface.lqns.entities.LQNConstants;
-import ca.appsimulations.jlqninterface.lqns.entities.Processor;
-import ca.appsimulations.jlqninterface.lqns.entities.ProcessorSchedulingType;
-import ca.appsimulations.jlqninterface.lqns.entities.Task;
-import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
-
+import ca.appsimulations.jlqninterface.lqns.entities.*;
 import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNModifier;
+import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNSolver;
 import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlModelInputParser;
 import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlResultParser;
 import ca.appsimulations.jlqninterface.utilities.Utility;
-import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNSolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
@@ -27,6 +22,7 @@ import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNSolver;
  *         in LQNS User Manual. For details regarding these LQN classes and
  *         members refer to LQNS User Manual.
  */
+@Component
 public class Algorithm1 extends Algorithm {
 
 	private LQNXmlModelInputParser lqnInputParser;
@@ -35,6 +31,7 @@ public class Algorithm1 extends Algorithm {
 	private BottleneckIdentifier botIdentifier;
 	private ArrayList<String> messages;
 
+	@Autowired
 	public Algorithm1(Model workspace) {
 		super(workspace);
 		this.lqnInputParser = new LQNXmlModelInputParser(workspace);
@@ -43,6 +40,8 @@ public class Algorithm1 extends Algorithm {
 		this.botIdentifier = new BottleneckIdentifier(workspace);
 		this.messages = new ArrayList<String>();
 	}
+
+
 
 	@Override
 	public void initialize() {
@@ -594,6 +593,7 @@ public class Algorithm1 extends Algorithm {
 		return true;
 	}
 
+	@PostConstruct
 	@Override
     public void run() {
 		String strMsg;

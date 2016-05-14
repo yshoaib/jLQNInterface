@@ -1,0 +1,79 @@
+package ca.appsimulations.jlqninterface.configuration;
+/**
+ * @author Yasir Shoaib (2011,2012)
+ * Contributors:
+ *   Yasir Shoaib - Implementation
+ *
+ * Some LQN classes and their members are outlined as UML class diagrams in LQNS User Manual.
+ * For details regarding these LQN classes and members refer to LQNS User Manual.
+ */
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ConfigurationService {
+
+	@Value("${inputFilePath}")
+	private String inputFilePath;
+
+	@Value("${outputFilePath}")
+	private String outputFilePath;
+
+	@Value("${responseTimeObjective}")
+	private double responseTimeObjective;
+
+	@Value("${maxVMReplicas}")
+	private int maxVMReplicas = 10;
+
+	@Value("${maxProcsPerVM}")
+	private int maxProcsPerVM = 8;
+
+	@Value("${spareVMs}")
+	private int spareVMs = 20;
+
+	@Value("${satThreshold}")
+	private double satThreshold;
+
+	@Value("${lqnXmlOutputFilePath}")
+	private String lqnXmlOutputFilePath;
+
+	@Value("${bottleneckMaxBStrengthTaskOnly}")
+	private boolean bottleneckMaxBStrengthTaskOnly;
+
+	public String getInputFilePath() {
+		return inputFilePath;
+	}
+
+	public String getOutputFilePath() {
+		return outputFilePath;
+	}
+
+	public double getResponseTimeObjective() {
+		return responseTimeObjective;
+	}
+
+	public int getMaxVMReplicas() {
+		return maxVMReplicas;
+	}
+
+	public int getMaxProcsPerVM() {
+		return maxProcsPerVM;
+	}
+
+	public int getSpareVMs() {
+		return spareVMs;
+	}
+
+	public double getSatThreshold() {
+		return satThreshold;
+	}
+
+	public String getLqnXmlOutputFilePath() {
+		return lqnXmlOutputFilePath;
+	}
+
+	public boolean isBottleneckMaxBStrengthTaskOnly() {
+		return bottleneckMaxBStrengthTaskOnly;
+	}
+}

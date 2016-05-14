@@ -8,28 +8,22 @@ package ca.appsimulations.jlqninterface.core;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import ca.appsimulations.jlqninterface.configuration.ConfigurationService;
+import ca.appsimulations.jlqninterface.lqns.entities.*;
+import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityDef;
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityDefBase;
-import ca.appsimulations.jlqninterface.lqns.entities.ActivityPhases;
-import ca.appsimulations.jlqninterface.lqns.entities.Entry;
-import ca.appsimulations.jlqninterface.lqns.entities.EntryAcType;
-import ca.appsimulations.jlqninterface.lqns.entities.Processor;
-import ca.appsimulations.jlqninterface.lqns.entities.Result;
-import ca.appsimulations.jlqninterface.lqns.entities.Task;
-import ca.appsimulations.jlqninterface.lqns.entities.TaskActivities;
-import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
-import ca.appsimulations.jlqninterface.utilities.Utility;
-
 //this class was previously named "workspace"
+@Component
 public class Model {
 	private ArrayList<Task> tasks;
 	private ArrayList<Task> refTasks;
 	private ArrayList<Entry> entries;
 	private ArrayList<Processor> processors;
 	private ArrayList<ActivityDefBase> activities;
-	private Configuration conf;
 	private String inputFilePath;
 	private String outputFilePath;
 	private String lqnXmlOutputFilePath;
@@ -43,22 +37,23 @@ public class Model {
 
 	private int maxBelow = 0;
 
-	public Model(String configFile) {
+
+	@Autowired
+	public Model(ConfigurationService configurationService) {
 		tasks = new ArrayList<Task>();
 		refTasks = new ArrayList<Task>();
 		entries = new ArrayList<Entry>();
 		processors = new ArrayList<Processor>();
 		activities = new ArrayList<ActivityDefBase>();
-		conf = new Configuration(configFile);
-		inputFilePath = conf.getInputFilePath();
-		outputFilePath = conf.getOutputFilePath();
-		lqnXmlOutputFilePath = conf.getLqnXmlOutputFilePath();
-		responseTimeObjective = conf.getResponseTimeObjective();
-		maxVMReplicas = conf.getMaxVMReplicas();
-		satThreshold = conf.getSatThreshold();
-		bottleneckBStrengthTaskOnly = conf.isBottleneckMaxBStrengthTaskOnly();
-		maxProcsPerVM = conf.getMaxProcsPerVM();
-		spareVMs = conf.getSpareVMs();
+		inputFilePath = configurationService.getInputFilePath();
+		outputFilePath = configurationService.getOutputFilePath();
+		lqnXmlOutputFilePath = configurationService.getLqnXmlOutputFilePath();
+		responseTimeObjective = configurationService.getResponseTimeObjective();
+		maxVMReplicas = configurationService.getMaxVMReplicas();
+		satThreshold = configurationService.getSatThreshold();
+		bottleneckBStrengthTaskOnly = configurationService.isBottleneckMaxBStrengthTaskOnly();
+		maxProcsPerVM = configurationService.getMaxProcsPerVM();
+		spareVMs = configurationService.getSpareVMs();
 		result = new Result();
 	}
 
