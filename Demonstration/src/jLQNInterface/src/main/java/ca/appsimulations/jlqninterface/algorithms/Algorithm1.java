@@ -44,9 +44,9 @@ public class Algorithm1 extends Algorithm {
 
 
 	@Override
-	public void initialize() {
+	public void setup() {
 		Utility.print("===============================================================================================================");
-		Utility.print("Initializing...");
+		Utility.print("Setting up algorithm...");
 
 		workspace.resetAll();
 		// Workspace workspace = new Workspace("./application.properties");
@@ -602,7 +602,7 @@ public class Algorithm1 extends Algorithm {
 		ArrayList<Entity> bSet = new ArrayList<Entity>();
 		ArrayList<Entity> bSetMaxRes = new ArrayList<Entity>();
 
-		initialize();
+		setup();
 
 		float maxResResponse = findMaxResourcePerformance(bSet);
 		bSetMaxRes = (ArrayList<Entity>) bSet.clone();
@@ -625,7 +625,7 @@ public class Algorithm1 extends Algorithm {
 			Utility.printAndDebug("No maximum bottleneck Task");
 		} else {
 			initialTry = botIdentifier.getMaxBStrengthTask().getName();
-			initialize();
+			setup();
 		}
 
 		int loopCount = 1;

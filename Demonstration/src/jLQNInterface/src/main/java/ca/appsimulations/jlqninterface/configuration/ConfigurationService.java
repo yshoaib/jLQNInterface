@@ -9,7 +9,12 @@ package ca.appsimulations.jlqninterface.configuration;
  */
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @Service
 public class ConfigurationService {
@@ -40,6 +45,24 @@ public class ConfigurationService {
 
 	@Value("${bottleneckMaxBStrengthTaskOnly}")
 	private boolean bottleneckMaxBStrengthTaskOnly;
+
+
+	@PostConstruct
+	public void initialize() throws IOException
+	{
+		ClassPathResource inputFileResource = new ClassPathResource(inputFilePath);
+		if(!inputFileResource.exists()){
+			throw new FileNotFoundException(inputFileResource.getPath() + "does not exist");
+		}
+		this.inputFilePath = inputFileResource.getFile().getAbsolutePath();
+
+		ClassPathResource outputFileResource = new ClassPathResource(outputFilePath);
+		if(!outputFileResource.exists())
+		{
+			throw new FileNotFoundException(outputFileResource.getPath() + "does not exist");
+		}
+		this.outputFilePath = outputFileResource.getFile().getAbsolutePath();
+	}
 
 	public String getInputFilePath() {
 		return inputFilePath;

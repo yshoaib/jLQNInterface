@@ -35,7 +35,7 @@ public abstract class Algorithm {
 
 	}
 
-	public abstract void initialize();
+	public abstract void setup();
 
 	public abstract void run();
 }
