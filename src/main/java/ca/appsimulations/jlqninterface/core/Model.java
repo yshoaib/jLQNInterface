@@ -11,6 +11,8 @@ package ca.appsimulations.jlqninterface.core;
 import ca.appsimulations.jlqninterface.configuration.ConfigurationService;
 import ca.appsimulations.jlqninterface.lqns.entities.*;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,9 @@ public class Model {
 	private Result result;
 
 	private int maxBelow = 0;
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
 
 	@Autowired
@@ -218,7 +223,7 @@ public class Model {
 			strB.append("\n");
 		}
 
-		Utility.debug(strB.toString());
+		logger.debug(strB.toString());
 
 	}
 

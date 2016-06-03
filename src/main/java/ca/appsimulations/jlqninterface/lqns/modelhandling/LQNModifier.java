@@ -13,6 +13,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -44,12 +46,15 @@ public class LQNModifier {
 	private Transformer transformer;
 	private Model workspace;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
 	public LQNModifier(Model workspace) {
 		tFactory = TransformerFactory.newInstance();
 		try {
 			transformer = tFactory.newTransformer();
 		} catch (TransformerConfigurationException e) {
-			Utility.debug("[TransformerConfigurationException]: " + e.getMessage());
+			logger.debug("[TransformerConfigurationException]: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -84,7 +89,7 @@ public class LQNModifier {
 
 			transformLQNXMLDocument(doc, outputFilePath);
 		} catch (Exception e) {
-			Utility.debug("[Exception]: " + e.getMessage());
+			logger.debug("[Exception]: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -94,7 +99,7 @@ public class LQNModifier {
 		// Printing nodes
 		Node n = doc.getDocumentElement().getFirstChild();
 		while (n != null) {
-			Utility.print("NODE: " + n.getNodeName());
+			logger.info("NODE: " + n.getNodeName());
 			n = n.getNextSibling();
 		}
 	}
@@ -107,14 +112,14 @@ public class LQNModifier {
 			fstream = new FileWriter(outputFilePath);
 
 			StreamResult result = new StreamResult(fstream);
-			Utility.debug("[LQNModifier] Writing XML to " + outputFilePath + "\n\n");
+			logger.debug("[LQNModifier] Writing XML to " + outputFilePath + "\n\n");
 
 			transformer.transform(source, result);
 		} catch (TransformerException e) {
-			Utility.debug("[TransformerConfigurationException]: " + e.getMessage());
+			logger.debug("[TransformerConfigurationException]: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			Utility.debug("[IOException]: " + e.getMessage());
+			logger.debug("[IOException]: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -147,7 +152,7 @@ public class LQNModifier {
 
 			if (n == null) {
 				// TODO
-				Utility.debug("Duplicate processor: " + p + " " + p.getDuplicatedFrom());
+				logger.debug("Duplicate processor: " + p + " " + p.getDuplicatedFrom());
 				Node duplicatedFrom = getNodeByElemAttributeName(doc, LQNXMLElements.PROCESSOR, p.getDuplicatedFrom().toString(), nodes);
 				Node cl = duplicatedFrom.cloneNode(false);
 				setAttributeValue(cl, LQNXMLAttributes.NAME.toString(), p.getName());
@@ -166,7 +171,7 @@ public class LQNModifier {
 			if (!nodeValue.equals(p.getScheduling().toString())) {
 				// modification required here.
 				tmpNode.setNodeValue(p.getScheduling().toString());
-				Utility.debug("[Changed] processor scheduling");
+				logger.debug("[Changed] processor scheduling");
 			}
 
 			// MULTIPLICITY
@@ -176,12 +181,12 @@ public class LQNModifier {
 				if (!nodeValue.equals(p.getMutiplicityString())) {
 					// modification required here.
 					tmpNode.setNodeValue(p.getMutiplicityString());
-					Utility.debug("[Changed] processor multiplicity");
+					logger.debug("[Changed] processor multiplicity");
 				}
 			} else if ((tmpNode == null) && (p.getScheduling() != ProcessorSchedulingType.INF) && (p.getMultiplicity() != 1)) {
 				Element e = (Element) n;
 				e.setAttribute(LQNXMLAttributes.MULTIPLICITY.toString(), p.getMutiplicityString());
-				Utility.debug("[Changed] processor multiplicity");
+				logger.debug("[Changed] processor multiplicity");
 			}
 
 			// REPLICATION
@@ -192,12 +197,12 @@ public class LQNModifier {
 				if (!nodeValue.equals(repString)) {
 					// modification required here.
 					tmpNode.setNodeValue(repString);
-					Utility.debug("[Changed] processor replication");
+					logger.debug("[Changed] processor replication");
 				}
 			} else if ((tmpNode == null) && (p.getScheduling() != ProcessorSchedulingType.INF) && (p.getReplication() != 1)) {
 				Element e = (Element) n;
 				e.setAttribute(LQNXMLAttributes.REPLICATION.toString(), repString);
-				Utility.debug("[Changed] processor replication");
+				logger.debug("[Changed] processor replication");
 			}
 		}
 	}
@@ -214,7 +219,7 @@ public class LQNModifier {
 
 		if (n == null) {
 			String duplicatedFromName = t.getDuplicatedFrom().getName();
-			Utility.debug("Duplicate task: " + t + " " + duplicatedFromName);
+			logger.debug("Duplicate task: " + t + " " + duplicatedFromName);
 			Node duplicatedFrom = getNodeByElemAttributeName(doc, LQNXMLElements.PROCESSOR, duplicatedFromName, nodes);
 			Node cl = duplicatedFrom.cloneNode(false);
 			setAttributeValue(cl, LQNXMLAttributes.NAME.toString(), t.getName());
@@ -234,7 +239,7 @@ public class LQNModifier {
 		if (!nodeValue.equals(t.getScheduling().toString())) {
 			// modification required here.
 			tmpNode.setNodeValue(t.getScheduling().toString());
-			Utility.debug("[Changed] task scheduling");
+			logger.debug("[Changed] task scheduling");
 		}
 
 		// MULTIPLICITY
@@ -244,12 +249,12 @@ public class LQNModifier {
 			if (!nodeValue.equals(t.getMutiplicityString())) {
 				// modification required here.
 				tmpNode.setNodeValue(t.getMutiplicityString());
-				Utility.debug("[Changed] task multiplicity");
+				logger.debug("[Changed] task multiplicity");
 			}
 		} else if ((tmpNode == null) && (t.getScheduling() != TaskSchedulingType.INF) && (t.getMultiplicity() != 1)) {
 			Element e = (Element) n;
 			e.setAttribute(LQNXMLAttributes.MULTIPLICITY.toString(), t.getMutiplicityString());
-			Utility.debug("[Changed] task multiplicity");
+			logger.debug("[Changed] task multiplicity");
 		}
 
 		// REPLICATION
@@ -260,13 +265,13 @@ public class LQNModifier {
 			if (!nodeValue.equals(repString)) {
 				// modification required here.
 				tmpNode.setNodeValue(repString);
-				Utility.debug("[Changed] task replication");
+				logger.debug("[Changed] task replication");
 			}
 		} else if ((tmpNode == null) && (t.getScheduling() != TaskSchedulingType.INF) && (t.getReplication() != 1)) {
 
 			Element e = (Element) n;
 			e.setAttribute(LQNXMLAttributes.REPLICATION.toString(), repString);
-			Utility.debug("[Changed] task replication");
+			logger.debug("[Changed] task replication");
 		}
 
 		return true;
@@ -291,7 +296,7 @@ public class LQNModifier {
 		if (n == null) {
 			// Node not present - manually added.
 
-			Utility.debug("Duplicate entry: " + e + " " + e.getDuplicatedFrom());
+			logger.debug("Duplicate entry: " + e + " " + e.getDuplicatedFrom());
 			Node duplicatedFrom = getNodeByElemAttributeName(doc, LQNXMLElements.ENTRY, e.getDuplicatedFrom(), nodes);
 			Node cl = duplicatedFrom.cloneNode(true);
 			setAttributeValue(cl, LQNXMLAttributes.NAME.toString(), e.getName());
@@ -311,7 +316,7 @@ public class LQNModifier {
 		Node entryPhAcNode = entryNode.getFirstChild().getNextSibling();
 		if (!entryPhAcNode.getNodeName().equals(LQNXMLElements.ENTRY_PHASE_ACTIVITIES.toString())) {
 			SAXException se = new SAXException("Node name is not <entry-phase-activities>");
-			Utility.debug(se.getMessage());
+			logger.debug(se.getMessage());
 			se.printStackTrace();
 		}
 
@@ -322,14 +327,14 @@ public class LQNModifier {
 			ActivityPhases ap = (ActivityPhases) e.getActivityAtPhase(phase);
 			if (ap == null) {
 				SAXException se = new SAXException("Workspace entry has no phase " + phase + " activities");
-				Utility.debug(se.getMessage());
+				logger.debug(se.getMessage());
 				se.printStackTrace();
 			}
 
 			// phase1 activity XML node
 			if (!activityNode.getNodeName().equals(LQNXMLElements.ACTIVITY.toString())) {
 				SAXException se = new SAXException("Node name is not <activitites>");
-				Utility.debug(se.getMessage());
+				logger.debug(se.getMessage());
 				se.printStackTrace();
 			}
 			updateActivityPhasesDepth(doc, activityNode, ap, phase);
@@ -350,7 +355,7 @@ public class LQNModifier {
 				setAttributeValue(activityNode, LQNXMLAttributes.NAME.toString(), apName);
 			} else {
 				SAXException se = new SAXException("XML Activity name is not same as workspace values");
-				Utility.debug(se.getMessage());
+				logger.debug(se.getMessage());
 				se.printStackTrace();
 			}
 		}
@@ -359,7 +364,7 @@ public class LQNModifier {
 		String apPhase = "" + ap.getPhase();
 		if (!acPhase.equals(apPhase)) {
 			SAXException se = new SAXException("XML Activity phase is not same as workspace phase");
-			Utility.debug(se.getMessage());
+			logger.debug(se.getMessage());
 			se.printStackTrace();
 		}
 
@@ -377,7 +382,7 @@ public class LQNModifier {
 			String destName = s.getDestEntry().getName();
 			Node destNode = this.getNodeFromNodeList(childNodesActivity, LQNXMLAttributes.DEST.toString(), destName);
 			if (destNode == null) {
-				Utility.debug("Duplicate synch-call: dest-entry is " + destName + " (actvity): " + ap.getName());
+				logger.debug("Duplicate synch-call: dest-entry is " + destName + " (actvity): " + ap.getName());
 				// synch-call doesn't exist. manually-added
 				int c = 0;
 				Node cNode = null;
@@ -391,7 +396,7 @@ public class LQNModifier {
 
 				if (cNode == null) {
 					SAXException se = new SAXException("PROBLEM: cNode is null");
-					Utility.debug(se.getMessage());
+					logger.debug(se.getMessage());
 					se.printStackTrace();
 				} else {
 					Node newNode = cNode.cloneNode(true);
@@ -411,7 +416,7 @@ public class LQNModifier {
 
 				SynchCall s = ap.getSynchCallByStrDestEntry(dest);
 				if (s == null) {
-					Utility.debug("No synch-call by dest " + dest + " in workspace, activity: " + ap.getName());
+					logger.debug("No synch-call by dest " + dest + " in workspace, activity: " + ap.getName());
 					continue;
 				}
 
@@ -421,7 +426,7 @@ public class LQNModifier {
 				if (strFanin != null) {
 					fanin = Integer.parseInt(strFanin);
 					if (fanin != s.getFanin()) {
-						Utility.debug("[Changed] fanin");
+						logger.debug("[Changed] fanin");
 						this.setAttributeValue(cNode, LQNXMLAttributes.FANIN.toString(), s.getFanin() + "");
 					}
 				}
@@ -429,7 +434,7 @@ public class LQNModifier {
 				if (strFanout != null) {
 					fanout = Integer.parseInt(strFanout);
 					if (fanout != s.getFanout()) {
-						Utility.debug("[Changed] fanout");
+						logger.debug("[Changed] fanout");
 						this.setAttributeValue(cNode, LQNXMLAttributes.FANOUT.toString(), s.getFanout() + "");
 					}
 				}
@@ -438,7 +443,7 @@ public class LQNModifier {
 					callsMean = Float.parseFloat(strCallsMean);
 
 					if (callsMean != s.getCallsMean()) {
-						Utility.debug("[Changed] callsmean");
+						logger.debug("[Changed] callsmean");
 						this.setAttributeValue(cNode, LQNXMLAttributes.CALLS_MEAN.toString(), s.getCallsMean() + "");
 					}
 				}

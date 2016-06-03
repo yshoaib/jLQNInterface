@@ -20,9 +20,12 @@ import ca.appsimulations.jlqninterface.lqns.entities.ProcessorSchedulingType;
 import ca.appsimulations.jlqninterface.lqns.entities.Task;
 import ca.appsimulations.jlqninterface.lqns.entities.TaskSchedulingType;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BottleneckIdentifier {
 	private Model workspace;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public BottleneckIdentifier(Model workspace) {
 		this.workspace = workspace;
@@ -150,7 +153,7 @@ public class BottleneckIdentifier {
 				tCount++;
 			}
 		}
-		Utility.debug("MAX BStrength " + maxBStrengthValue);
+		logger.debug("MAX BStrength " + maxBStrengthValue);
 
 		printBStrengthTable();
 		return bSet;
@@ -196,7 +199,7 @@ public class BottleneckIdentifier {
 			strB.append(String.format(formatStringProc, p.getName(), "-", "-", "-", "-", mult, rep, dup, through, util, sat, "-"));
 		}
 
-		Utility.print(strB.toString());
+		logger.info(strB.toString());
 	}
 
 	public Task getMaxBStrengthTask() {
