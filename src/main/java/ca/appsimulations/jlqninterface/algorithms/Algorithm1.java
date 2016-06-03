@@ -7,6 +7,8 @@ import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNSolver;
 import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlModelInputParser;
 import ca.appsimulations.jlqninterface.lqns.modelhandling.LQNXmlResultParser;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,8 @@ public class Algorithm1 extends Algorithm {
 	private LQNModifier lqnmod;
 	private BottleneckIdentifier botIdentifier;
 	private ArrayList<String> messages;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
 	@Autowired
 	public Algorithm1(Model workspace) {
@@ -45,50 +49,50 @@ public class Algorithm1 extends Algorithm {
 
 	@Override
 	public void setup() {
-		Utility.print("===============================================================================================================");
-		Utility.print("Setting up algorithm...");
+		logger.info("===============================================================================================================");
+		logger.info("Setting up algorithm...");
 
 		workspace.resetAll();
 		// Workspace workspace = new Workspace("./application.properties");
 
-		Utility.debug("Parsing input file " + inputFilePath);
+		logger.debug("Parsing input file " + inputFilePath);
 		try {
 			lqnInputParser.ParseFile(inputFilePath);
 		} catch (FileNotFoundException fnfe) {
-			Utility.debug("[FileNotFoundException]: " + fnfe.getMessage());
+			logger.debug("[FileNotFoundException]: " + fnfe.getMessage());
 			fnfe.printStackTrace();
 		}
 
-		Utility.debug("Linking entries...");
+		logger.debug("Linking entries...");
 		workspace.LinkEntries();
 
 		// lqnParser.printProcessors();
-		Utility.debug("Building DestTree...");
+		logger.debug("Building DestTree...");
 		workspace.buildDestTree();
 		try {
 			workspace.organizeTasksBasedBelowSize();
 		} catch (Exception e) {
-			Utility.debug("[Exception]: " + e.getMessage());
+			logger.debug("[Exception]: " + e.getMessage());
 			e.printStackTrace();
 			return;
 		}
 
-		Utility.debug("");
+		logger.debug("");
 		workspace.printDestTree();
-		Utility.debug("");
+		logger.debug("");
 
-		Utility.print("Initial model details:");
+		logger.info("Initial model details:");
 		botIdentifier.printBStrengthTable();
-		Utility.print("");
+		logger.info("");
 
-		Utility.print("DONE Initializing.");
-		Utility.print("");
+		logger.info("DONE Initializing.");
+		logger.info("");
 	}
 
 	//return false if problem solving
 	private boolean findBottlenecks(ArrayList<Entity> bStrengthTable, ArrayList<Entity> unchangeable, boolean solveModel) {
-		Utility.print("Finding bottleneck...");
-		Utility.print("");
+		logger.info("Finding bottleneck...");
+		logger.info("");
 		bStrengthTable.clear();
 
 		if (solveModel) {
@@ -101,63 +105,63 @@ public class Algorithm1 extends Algorithm {
 
 		bStrengthTable.addAll(botIdentifier.generateBStrengthTable(satThreshold, unchangeable, this.bottleneckMaxBStrengthTaskOnly));
 
-		Utility.print("FindingBottleneck...DONE");
-		Utility.print("");
+		logger.info("FindingBottleneck...DONE");
+		logger.info("");
 
 		return true;
 	}
 
 	private boolean solveAndParseModel() {
-		Utility.print("Solving model...");
-		Utility.print("");
+		logger.info("Solving model...");
+		logger.info("");
 
-		Utility.debug("Linking Entries...");
+		logger.debug("Linking Entries...");
 		workspace.LinkEntries();
-		Utility.debug("Building Dest Tree...");
+		logger.debug("Building Dest Tree...");
 		workspace.buildDestTree();
 		try {
 			workspace.organizeTasksBasedBelowSize();
 		} catch (Exception e) {
-			Utility.debug("[Exception]: " + e.getMessage());
+			logger.debug("[Exception]: " + e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}
 
 		workspace.printDestTree();
-		Utility.debug("");
+		logger.debug("");
 
-		Utility.debug("Parsing and updating XML model");
-		Utility.debug("input file: " + inputFilePath);
-		Utility.debug("output model to: " + outputFilePath);
-		Utility.debug("");
+		logger.debug("Parsing and updating XML model");
+		logger.debug("input file: " + inputFilePath);
+		logger.debug("output model to: " + outputFilePath);
+		logger.debug("");
 
 		//update from in-memory representation of the model, output the updated model to outputFilePath
 		lqnmod.parseAndUpdateXML(lqnInputParser.getLQXCData(false), inputFilePath, outputFilePath);
 
 		boolean result = LQNSolver.solveLqns(outputFilePath, outputFilePath + ".result", lqnResultParser, xmlOutputFilePath);
 		if (result == false) {
-			Utility.print("Problem solving.");
+			logger.info("Problem solving.");
 			return false;
 		}
 		
 
-		Utility.print("Solving Model...DONE.");
-		Utility.print("");
+		logger.info("Solving Model...DONE.");
+		logger.info("");
 		return true;
 	}
 
 	//return response time of first ref type task
 	public float findMaxResourcePerformance(ArrayList<Entity> bSet) {
-		Utility.print("Finding max resource performance...");
+		logger.info("Finding max resource performance...");
 		boolean flag = false;
 		HashMap<Entity, Integer> hMap = new HashMap<Entity, Integer>();
 		int tmpMaxVMReplicas = this.maxVMReplicas;
 		int tmpMaxProcsPerVM = this.maxProcsPerVM;
 
 		while (!flag && (tmpMaxProcsPerVM >= 1 || tmpMaxVMReplicas >= 1)) {
-			Utility.print("-----------------------------------------------------------------------------");
-			Utility.print("Solving to find maxResourcePerformance: maxVMReplicas: " + tmpMaxVMReplicas + " maxProcsPerVM: " + tmpMaxProcsPerVM);
-			Utility.print("-----------------------------------------------------------------------------");
+			logger.info("-----------------------------------------------------------------------------");
+			logger.info("Solving to find maxResourcePerformance: maxVMReplicas: " + tmpMaxVMReplicas + " maxProcsPerVM: " + tmpMaxProcsPerVM);
+			logger.info("-----------------------------------------------------------------------------");
 
 			for (Processor p : workspace.getProcessors()) {
 
@@ -206,21 +210,21 @@ public class Algorithm1 extends Algorithm {
 			return LQNConstants.UNDEF.getConstantValue();
 		}
 
-		Utility.print("==============================================================");
-		Utility.print("maxReplicasPerVM tried: " + tmpMaxVMReplicas);
-		Utility.print("maxProcessorsPerVM tried: " + tmpMaxProcsPerVM);
-		Utility.print("Max resource performance");
+		logger.info("==============================================================");
+		logger.info("maxReplicasPerVM tried: " + tmpMaxVMReplicas);
+		logger.info("maxProcessorsPerVM tried: " + tmpMaxProcsPerVM);
+		logger.info("Max resource performance");
 		float responseTime = this.getFirstRefTaskResponseTime();
-		Utility.print("==============================================================");
+		logger.info("==============================================================");
 
-		Utility.print("Finding max resource performance...DONE");
+		logger.info("Finding max resource performance...DONE");
 
 		return responseTime;
 	}
 
 	/*	public float findMaxResourcePerformance() {
-			Utility.print("Finding max resource performance...");
-			Utility.print("");
+			logger.info("Finding max resource performance...");
+			logger.info("");
 
 			for (Processor p : workspace.getProcessors()) {
 				if (p.getMultiplicity() != LQNConstants.INFINITY.getConstantValue() && p.getScheduling() != ProcessorSchedulingType.INF) {
@@ -242,10 +246,10 @@ public class Algorithm1 extends Algorithm {
 				return LQNConstants.UNDEF.getConstantValue();
 			}
 
-			Utility.print("Max resource performance");
+			logger.info("Max resource performance");
 			float responseTime = this.getFirstRefTaskResponseTime();
 
-			Utility.print("Finding max resource performance...DONE");
+			logger.info("Finding max resource performance...DONE");
 
 			return responseTime;
 		}
@@ -262,7 +266,7 @@ public class Algorithm1 extends Algorithm {
 		ActivityPhases ap = (ActivityPhases) refTasks.get(0).getEntries().get(0).getActivityAtPhase(1);
 		float responseTime = ap.getResult().getService_time();
 		if (printInfo) {
-			Utility.print("Task " + t + " entry: " + e + " activity " + ap + " ph1 response time: " + responseTime);
+			logger.info("Task " + t + " entry: " + e + " activity " + ap + " ph1 response time: " + responseTime);
 		}
 
 		return responseTime;
@@ -275,8 +279,8 @@ public class Algorithm1 extends Algorithm {
 		int addedVMs = 0;
 		int loopCount = 0;
 		Task initialTask = null;
-		Utility.print("Finding initial configuration that solves model...");
-		Utility.print("");
+		logger.info("Finding initial configuration that solves model...");
+		logger.info("");
 
 		while (!endLoop) {
 			loopCount++;
@@ -294,15 +298,15 @@ public class Algorithm1 extends Algorithm {
 				initialTask = t;
 				boolean wasDuplicated = this.processTaskDuplication(t, 1, unchangeable, addedVMs);
 				if (!wasDuplicated) {
-					Utility.debug("Task " + t + " was not replicated");
+					logger.debug("Task " + t + " was not replicated");
 					continue;
 				}
 				changeCount++;
 				addedVMs++;
-				Utility.print("=======================================");
+				logger.info("=======================================");
 				strChange = "InitialSolvableConf Change" + changeCount + ": " + "TASK: " + t + " VM = " + t.getDuplicationCount() + " in next loop";
-				Utility.print(strChange);
-				Utility.print("=======================================");
+				logger.info(strChange);
+				logger.info("=======================================");
 				messages.add(strChange);
 			} else {
 				ArrayList<Task> ent = (ArrayList<Task>) workspace.getTasks().clone();
@@ -319,15 +323,15 @@ public class Algorithm1 extends Algorithm {
 						}
 						boolean wasDuplicated = this.processTaskDuplication(t, 1, unchangeable, addedVMs);
 						if (!wasDuplicated) {
-							Utility.debug("Task " + t + " was not replicated");
+							logger.debug("Task " + t + " was not replicated");
 							continue;
 						}
 						changeCount++;
 						addedVMs++;
-						Utility.print("=======================================");
+						logger.info("=======================================");
 						strChange = "InitialSolvableConf Change" + changeCount + ": " + "TASK: " + t + " VM = " + t.getDuplicationCount() + " in next loop";
-						Utility.print(strChange);
-						Utility.print("=======================================");
+						logger.info(strChange);
+						logger.info("=======================================");
 						messages.add(strChange);
 					}
 				}
@@ -345,15 +349,15 @@ public class Algorithm1 extends Algorithm {
 				initialTask = t;
 				boolean wasDuplicated = this.processTaskDuplication(t, 1, unchangeable, addedVMs);
 				if (!wasDuplicated) {
-					Utility.debug("Task " + t + " was not replicated");
+					logger.debug("Task " + t + " was not replicated");
 					continue;
 				}
 				changeCount++;
 				addedVMs++;
-				Utility.print("=======================================");
+				logger.info("=======================================");
 				strChange = "[InitialSolvableConf Change count: " + changeCount + "] " + "TASK: " + t + " m-replication = " + t.getDuplicationCount() + " in next loop";
-				Utility.print(strChange);
-				Utility.print("=======================================");
+				logger.info(strChange);
+				logger.info("=======================================");
 				changes.add(strChange);
 			} else {
 			ArrayList<Processor> ent = (ArrayList<Processor>) workspace.getProcessors().clone();
@@ -362,16 +366,16 @@ public class Algorithm1 extends Algorithm {
 					boolean wasMultiplicated = processProcessorMultiplication(p, 1, unchangeable);
 
 					if (!wasMultiplicated) {
-						Utility.debug("Processor " + p + " was not duplicated");
+						logger.debug("Processor " + p + " was not duplicated");
 						continue;
 					}
 
 					changeCount++;
 					//addedVMs++;
-					Utility.print("=======================================");
+					logger.info("=======================================");
 					strChange = "[InitialSolvableConf Change count: " + changeCount + "] " + "PROCESSOR: " + p + " multiplicity = " + p.getMultiplicity() + " in next loop";
-					Utility.print(strChange);
-					Utility.print("=======================================");
+					logger.info(strChange);
+					logger.info("=======================================");
 					changes.add(strChange);
 				}
 			}
@@ -379,8 +383,8 @@ public class Algorithm1 extends Algorithm {
 
 			endLoop = findBottlenecks(bSet, unchangeable, true);
 
-			Utility.print("Bottlenecks: " + bSet.toString());
-			Utility.print("Unchangeable: " + unchangeable.toString());
+			logger.info("Bottlenecks: " + bSet.toString());
+			logger.info("Unchangeable: " + unchangeable.toString());
 
 			if (!endLoop && ((bSet == null) || (bSet.isEmpty()))) {
 				if (loopCount > 4) {
@@ -388,12 +392,12 @@ public class Algorithm1 extends Algorithm {
 				}
 				continue;
 			} else if ((bSet == null) || (bSet.isEmpty())) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				endLoop = true;
 			}
 		}
-		Utility.print("Finding initial configuration that solves model...DONE");
-		Utility.print("");
+		logger.info("Finding initial configuration that solves model...DONE");
+		logger.info("");
 		return changeCount;
 	}
 
@@ -404,11 +408,11 @@ public class Algorithm1 extends Algorithm {
 		int addedVMs = 0;
 		int loopCount = 0;
 		Task initialTask = workspace.getTaskByName(initialTry);
-		Utility.print("Finding initial configuration that solves model...");
-		Utility.print("");
+		logger.info("Finding initial configuration that solves model...");
+		logger.info("");
 
-		Utility.print("Bottlenecks: " + bSet.toString());
-		Utility.print("Unchangeable: " + unchangeable.toString());
+		logger.info("Bottlenecks: " + bSet.toString());
+		logger.info("Unchangeable: " + unchangeable.toString());
 
 		if (initialTask != null) {
 			if (!bSet.contains(initialTask)) {
@@ -424,23 +428,23 @@ public class Algorithm1 extends Algorithm {
 
 				if (bSet.contains(t.getProcessor())) {
 					//since processor of this task is also a bottleneck, first add the processor
-					Utility.print("Skipping task " + t + " duplication as parent processor is also bottleneck");
+					logger.info("Skipping task " + t + " duplication as parent processor is also bottleneck");
 					continue;
 				}
 
 				boolean wasDuplicated = this.processTaskDuplication(t, 1, unchangeable, addedVMs);
 
 				if (!wasDuplicated) {
-					Utility.debug("Task " + t + " was not replicated");
+					logger.debug("Task " + t + " was not replicated");
 					continue;
 				}
 
 				changeCount++;
 				addedVMs++;
-				Utility.print("=======================================");
+				logger.info("=======================================");
 				strChange = "InitialSolvableConf Change" + changeCount + ": " + "TASK: " + t + " VM = " + t.getDuplicationCount() + " in next loop";
-				Utility.print(strChange);
-				Utility.print("=======================================");
+				logger.info(strChange);
+				logger.info("=======================================");
 				messages.add(strChange);
 			} else if (b instanceof Processor) {
 				Processor p = workspace.getProcessorByName(((Processor) b).getName());
@@ -448,25 +452,25 @@ public class Algorithm1 extends Algorithm {
 				boolean wasMultiplicated = processProcessorMultiplication(p, 1, unchangeable);
 
 				if (!wasMultiplicated) {
-					Utility.debug("Processor " + p + " was not duplicated");
+					logger.debug("Processor " + p + " was not duplicated");
 					continue;
 				}
 
 				changeCount++;
-				Utility.print("=======================================");
+				logger.info("=======================================");
 				strChange = "InitialSolvableConf Change" + changeCount + ": " + "PROC: " + p + " multiplicity = " + p.getMultiplicity() + " in next loop";
-				Utility.print(strChange);
-				Utility.print("=======================================");
+				logger.info(strChange);
+				logger.info("=======================================");
 				messages.add(strChange);
 			}
 
 			endLoop = findBottlenecks(bSet, unchangeable, true);
 
-			Utility.print("Bottlenecks: " + bSet.toString());
-			Utility.print("Unchangeable: " + unchangeable.toString());
+			logger.info("Bottlenecks: " + bSet.toString());
+			logger.info("Unchangeable: " + unchangeable.toString());
 
 			if (endLoop) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				break;
 			} else if (!endLoop && ((bSet == null) || (bSet.isEmpty()))) {
 				if (loopCount > 4) {
@@ -474,7 +478,7 @@ public class Algorithm1 extends Algorithm {
 					break;
 				}
 			} else if ((bSet == null) || (bSet.isEmpty())) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				endLoop = true;
 				break;
 			}
@@ -491,15 +495,15 @@ public class Algorithm1 extends Algorithm {
 				if (t.getMultiplicity() != LQNConstants.INFINITY.getConstantValue() && t.getScheduling() != TaskSchedulingType.INF && t.getScheduling() != TaskSchedulingType.REF) {
 					boolean wasDuplicated = this.processTaskDuplication(t, 1, unchangeable, addedVMs);
 					if (!wasDuplicated) {
-						Utility.debug("Task " + t + " was not replicated");
+						logger.debug("Task " + t + " was not replicated");
 						continue;
 					}
 					changeCount++;
 					addedVMs++;
-					Utility.print("=======================================");
+					logger.info("=======================================");
 					strChange = "InitialSolvableConf Change" + changeCount + ": " + "TASK: " + t + " VM = " + t.getDuplicationCount() + " in next loop";
-					Utility.print(strChange);
-					Utility.print("=======================================");
+					logger.info(strChange);
+					logger.info("=======================================");
 					messages.add(strChange);
 				}
 			}
@@ -511,16 +515,16 @@ public class Algorithm1 extends Algorithm {
 					boolean wasMultiplicated = processProcessorMultiplication(p, 1, unchangeable);
 
 					if (!wasMultiplicated) {
-						Utility.debug("Processor " + p + " was not duplicated");
+						logger.debug("Processor " + p + " was not duplicated");
 						continue;
 					}
 
 					changeCount++;
 					//addedVMs++;
-					Utility.print("=======================================");
+					logger.info("=======================================");
 					strChange = "[InitialSolvableConf Change count: " + changeCount + "] " + "PROCESSOR: " + p + " multiplicity = " + p.getMultiplicity() + " in next loop";
-					Utility.print(strChange);
-					Utility.print("=======================================");
+					logger.info(strChange);
+					logger.info("=======================================");
 					changes.add(strChange);
 				}
 			}
@@ -528,11 +532,11 @@ public class Algorithm1 extends Algorithm {
 
 			endLoop = findBottlenecks(bSet, unchangeable, true);
 
-			Utility.print("Bottlenecks: " + bSet.toString());
-			Utility.print("Unchangeable: " + unchangeable.toString());
+			logger.info("Bottlenecks: " + bSet.toString());
+			logger.info("Unchangeable: " + unchangeable.toString());
 
 			if (endLoop) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				break;
 			} else if (!endLoop && ((bSet == null) || (bSet.isEmpty()))) {
 				if (loopCount > 4) {
@@ -540,12 +544,12 @@ public class Algorithm1 extends Algorithm {
 				}
 				continue;
 			} else if ((bSet == null) || (bSet.isEmpty())) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				endLoop = true;
 			}
 		}
-		Utility.print("Finding initial configuration that solves model...DONE");
-		Utility.print("");
+		logger.info("Finding initial configuration that solves model...DONE");
+		logger.info("");
 		return changeCount;
 	}
 
@@ -563,13 +567,13 @@ public class Algorithm1 extends Algorithm {
 			if (unchangeable != null && (!unchangeable.contains(t))) {
 				unchangeable.add(t);
 			}
-			Utility.print(t.getName() + " has reached maxReplicas: ");
+			logger.info(t.getName() + " has reached maxReplicas: ");
 			return false;
 		} else if (addedVMs >= this.spareVMs) {
 			if (unchangeable != null && (!unchangeable.contains(t))) {
 				unchangeable.add(t);
 			}
-			Utility.print("No more VMs available.");
+			logger.info("No more VMs available.");
 			return false;
 		}
 
@@ -585,7 +589,7 @@ public class Algorithm1 extends Algorithm {
 				unchangeable.add(p);
 			}
 
-			Utility.print(p.getName() + " " + "multiplicity: " + p.getMultiplicity() + " has reached maxReplicas: " + maxProcsPerVM);
+			logger.info(p.getName() + " " + "multiplicity: " + p.getMultiplicity() + " has reached maxReplicas: " + maxProcsPerVM);
 			return false;
 		}
 		p.setMultiplicity(p.getMultiplicity() + multiplicityAdded);
@@ -609,20 +613,20 @@ public class Algorithm1 extends Algorithm {
 
 		if (maxResResponse == LQNConstants.UNDEF.getConstantValue()) {
 			botIdentifier.printBStrengthTable();
-			Utility.print("Unable to find model solution for maximum resources. DONE.");
+			logger.info("Unable to find model solution for maximum resources. DONE.");
 			return;
 		} else if (maxResResponse > responseTimeObjective) {
 			botIdentifier.printBStrengthTable();
-			Utility.print("Max Resource ResponseTime: " + maxResResponse);
-			Utility.print("ResponseTime Objective: " + responseTimeObjective);
-			Utility.print("Unable to find model solution: Max Resource ResponseTime > responseTimeObjective. DONE");
+			logger.info("Max Resource ResponseTime: " + maxResResponse);
+			logger.info("ResponseTime Objective: " + responseTimeObjective);
+			logger.info("Unable to find model solution: Max Resource ResponseTime > responseTimeObjective. DONE");
 			return;
 		}
 
 		//get maxBStrength task name based on model run for findMaxResourcePerformance.
 		String initialTry = null;
 		if (botIdentifier.getMaxBStrengthTask() == null) {
-			Utility.printAndDebug("No maximum bottleneck Task");
+			logger.info("No maximum bottleneck Task");
 		} else {
 			initialTry = botIdentifier.getMaxBStrengthTask().getName();
 			setup();
@@ -643,27 +647,27 @@ public class Algorithm1 extends Algorithm {
 				findBottlenecks(bSet, unchangeable, true);
 				changeCount = changeCount + initialChanges;
 				if (initialChanges == 0) {
-					Utility.print("Unable to find model solution");
+					logger.info("Unable to find model solution");
 					break;
 				}
 			} else if (flag == false) {
 				botIdentifier.printBStrengthTable();
-				Utility.print("Unable to find model solution");
+				logger.info("Unable to find model solution");
 				break;
 			}
 
 			float responseTime = this.getFirstRefTaskResponseTime(refTasks, false);
 			if (this.responseTimeObjective >= responseTime) {
-				Utility.print("Met response Time Objectives - DONE");
-				Utility.print(String.format("Objective: %.3f, ResponseTime: %.3f", responseTimeObjective, responseTime));
+				logger.info("Met response Time Objectives - DONE");
+				logger.info(String.format("Objective: %.3f, ResponseTime: %.3f", responseTimeObjective, responseTime));
 				break;
 			}
 
-			Utility.print("Bottlenecks: " + bSet.toString());
-			Utility.print("Unchangeable: " + unchangeable.toString());
+			logger.info("Bottlenecks: " + bSet.toString());
+			logger.info("Unchangeable: " + unchangeable.toString());
 
 			if ((bSet == null) || (bSet.isEmpty())) {
-				Utility.print("No more bottlenecks - DONE");
+				logger.info("No more bottlenecks - DONE");
 				break;
 			}
 
@@ -674,7 +678,7 @@ public class Algorithm1 extends Algorithm {
 
 					if (bSet.contains(t.getProcessor())) {
 						//since processor of this task is also a bottleneck, first add the processor
-						Utility.print("Skipping task " + t + " duplication as parent processor is also bottleneck");
+						logger.info("Skipping task " + t + " duplication as parent processor is also bottleneck");
 						continue;
 					}
 
@@ -683,16 +687,16 @@ public class Algorithm1 extends Algorithm {
 					if (!wasDuplicated) {
 						strMsg = "Loop" + loopCount + " Limit reached: TASK: " + t + " VM not replicated in next loop";
 						messages.add(strMsg);
-						Utility.printAndDebug(strMsg);
+						logger.info(strMsg);
 						continue;
 					}
 
 					changeCount++;
 					addedVMs++;
-					Utility.print("=======================================");
+					logger.info("=======================================");
 					strMsg = "Loop" + loopCount + " Change" + changeCount + ": " + "TASK: " + t + " VM = " + t.getDuplicationCount() + " in next loop";
-					Utility.print(strMsg);
-					Utility.print("=======================================");
+					logger.info(strMsg);
+					logger.info("=======================================");
 					messages.add(strMsg);
 					curChangesCount++;
 
@@ -704,22 +708,22 @@ public class Algorithm1 extends Algorithm {
 					if (!wasMultiplicated) {
 						strMsg = "Loop" + loopCount + " Limit reached: PROC: " + p + " not duplicated in next loop";
 						messages.add(strMsg);
-						Utility.printAndDebug(strMsg);
+						logger.info(strMsg);
 						continue;
 					}
 
 					changeCount++;
-					Utility.print("=======================================");
+					logger.info("=======================================");
 					strMsg = "Loop" + loopCount + " Change" + changeCount + ": " + "PROC: " + p + " multiplicity = " + p.getMultiplicity() + " in next loop";
-					Utility.print(strMsg);
-					Utility.print("=======================================");
+					logger.info(strMsg);
+					logger.info("=======================================");
 					messages.add(strMsg);
 					curChangesCount++;
 				}
 			}
-			Utility.print("Loop " + loopCount + " DONE------------------------------------------------------------------------------");
-			Utility.print("Running...");
-			Utility.print("");
+			logger.info("Loop " + loopCount + " DONE------------------------------------------------------------------------------");
+			logger.info("Running...");
+			logger.info("");
 
 			try {
 				Thread.sleep(1000);
@@ -735,16 +739,16 @@ public class Algorithm1 extends Algorithm {
 			}
 
 			if (noChangesCount >= 5) {
-				Utility.print("No changes for previous 5 loops. DONE");
+				logger.info("No changes for previous 5 loops. DONE");
 				break;
 			}
 			loopCount++;
 		}
 
-		Utility.print("Summary of changes");
-		Utility.print("----------------------");
+		logger.info("Summary of changes");
+		logger.info("----------------------");
 		for (int i = 0; i < messages.size(); i++) {
-			Utility.print(messages.get(i));
+			logger.info(messages.get(i));
 		}
 
 	}

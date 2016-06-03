@@ -9,6 +9,8 @@ package ca.appsimulations.jlqninterface.lqns.modelhandling;
  */
 
 import ca.appsimulations.jlqninterface.core.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.*;
 import org.xml.sax.*;
 
@@ -37,6 +39,9 @@ public abstract class LQNParser extends DefaultHandler {
     protected boolean isTaskActivities = false;
     protected boolean isEntryPhaseActivities = false;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
     // LQX CData Parameters
     protected static final int defaultSpacing = 15;
 
@@ -59,16 +64,16 @@ public abstract class LQNParser extends DefaultHandler {
             xmlReader.setContentHandler(this);
             xmlReader.parse(filename);
         } catch (SAXException se) {
-            Utility.debug("[SAX Exception]: " + se.getMessage());
+            logger.debug("[SAX Exception]: " + se.getMessage());
             se.printStackTrace();
         } catch (ParserConfigurationException pce) {
-            Utility.debug("[PCE Exception]: " + pce.getMessage());
+            logger.debug("[PCE Exception]: " + pce.getMessage());
             pce.printStackTrace();
         } catch (IOException ie) {
-            Utility.debug("[IO Exception]: " + ie.getMessage());
+            logger.debug("[IO Exception]: " + ie.getMessage());
             ie.printStackTrace();
         } catch (Exception e) {
-            Utility.debug("[Exception]: " + e.getMessage());
+            logger.debug("[Exception]: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -77,7 +82,7 @@ public abstract class LQNParser extends DefaultHandler {
     public void printProcessors() {
         int size = workspace.getProcessorsSize();
         for (int i = 0; i < size; i++) {
-            Utility.print(workspace.getProcessorAtIndex(i).toString());
+            logger.info(workspace.getProcessorAtIndex(i).toString());
         }
     }
 

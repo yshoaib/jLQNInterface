@@ -3,6 +3,8 @@ import java.util.ArrayList;
 
 import ca.appsimulations.jlqninterface.core.Model;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
@@ -14,6 +16,7 @@ import ca.appsimulations.jlqninterface.utilities.Utility;
 public abstract class PhaseActivities extends Entity {
 	protected final int MAX_PHASES = 3;
 	protected final ArrayList<ActivityPhases> activityPhases = new ArrayList<ActivityPhases>(MAX_PHASES);
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public PhaseActivities(Model workspace) {
 		this.workspace = workspace;
@@ -27,7 +30,7 @@ public abstract class PhaseActivities extends Entity {
 	public void addActivityPhase(ActivityPhases a, int phase) {
 		// TODO
 		if (phase > MAX_PHASES) {
-			Utility.debug("[PROBLEM]: phase exceed MAX_PHASES (" + MAX_PHASES + ")");
+			logger.debug("[PROBLEM]: phase exceed MAX_PHASES (" + MAX_PHASES + ")");
 			return;
 		}
 		activityPhases.add(phase - 1, a);

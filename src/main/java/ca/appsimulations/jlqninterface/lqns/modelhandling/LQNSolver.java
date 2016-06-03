@@ -17,8 +17,11 @@ import java.lang.management.OperatingSystemMXBean;
 import ca.appsimulations.jlqninterface.lqns.entities.ResultTypes;
 import ca.appsimulations.jlqninterface.utilities.Utility;
 import javafx.application.Platform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LQNSolver {
+	private static final Logger logger = LoggerFactory.getLogger(LQNSolver.class);
 
 	public static boolean solveLqns(String inputPath, String outputPath, LQNXmlResultParser lqnResultParser, String xmlOutputFilePath) {
 		StringBuilder strCmd = new StringBuilder();
@@ -27,7 +30,7 @@ public class LQNSolver {
 		// strCmd.append("lqns ");
 		// strCmd.append(inputPath + " > " + outputPath);
 		// System.out.println(strCmd.toString());
-		Utility.debug("----Running Solver----");
+		logger.debug("----Running Solver----");
 		String[] cmd = { "bash", "-c", "lqns " + inputPath };
 
 
@@ -41,16 +44,16 @@ public class LQNSolver {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 			while ((read = inputReader.readLine()) != null) {
-				Utility.debug("[Input Reader]: " + read);
+				logger.debug("[Input Reader]: " + read);
 				if (read.indexOf("error:") != -1 || read.indexOf("advisory:") != -1) {
-					Utility.debug("[error] above");
+					logger.debug("[error] above");
 					isError = true;
 				}
 			}
 			inputReader.close();
 			while ((read = errorReader.readLine()) != null) {
 				isError = true;
-				Utility.debug("[Error Reader]: " + read);
+				logger.debug("[Error Reader]: " + read);
 			}
 			errorReader.close();
 
@@ -58,12 +61,12 @@ public class LQNSolver {
 				return false;
 			}
 			
-			Utility.debug("Parsing output file: " + xmlOutputFilePath);
+			logger.debug("Parsing output file: " + xmlOutputFilePath);
 
 			try {
 				lqnResultParser.ParseFile(xmlOutputFilePath);
 			} catch (FileNotFoundException fnfe) {
-				Utility.debug("[FileNotFoundException]: " + fnfe.getMessage());
+				logger.debug("[FileNotFoundException]: " + fnfe.getMessage());
 				fnfe.printStackTrace();
 				return false;
 			}
@@ -71,9 +74,9 @@ public class LQNSolver {
 			return lqnResultParser.workspace.getResult().getResultValid().equals(ResultTypes.YES);
 			
 		} catch (IOException io) {
-			Utility.debug("[IOException]: " + io.getMessage());
+			logger.debug("[IOException]: " + io.getMessage());
 		} catch (InterruptedException intE) {
-			Utility.debug("[InterruptedException]: " + intE.getMessage());
+			logger.debug("[InterruptedException]: " + intE.getMessage());
 		}
 		return false;
 	}
@@ -85,7 +88,7 @@ public class LQNSolver {
 		// strCmd.append("lqns ");
 		// strCmd.append(inputPath + " > " + outputPath);
 		// System.out.println(strCmd.toString());
-		Utility.debug("----Running Solver----");
+		logger.debug("----Running Solver----");
 
 		//convert XML to simple lqn format file
 		String modifiedInputPath = inputPath.substring(0, inputPath.lastIndexOf(".lqnx")) + ".lqn";
@@ -93,7 +96,7 @@ public class LQNSolver {
 		String[] cmd0 = { "bash", "-c", strCmd0 };
 		Process p;
 		try {
-			Utility.debug("Running cmd: " + strCmd0);
+			logger.debug("Running cmd: " + strCmd0);
 			p = Runtime.getRuntime().exec(cmd0);
 			p.waitFor();
 
@@ -103,22 +106,22 @@ public class LQNSolver {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 			while ((read = inputReader.readLine()) != null) {
-				Utility.debug("[Input Reader]: " + read);
+				logger.debug("[Input Reader]: " + read);
 				if (read.indexOf("error:") != -1 || read.indexOf("advisory:") != -1) {
-					Utility.debug("[error] above");
+					logger.debug("[error] above");
 					isError = true;
 				}
 			}
 			inputReader.close();
 			while ((read = errorReader.readLine()) != null) {
 				isError = true;
-				Utility.debug("[Error Reader]: " + read);
+				logger.debug("[Error Reader]: " + read);
 			}
 			errorReader.close();
 		} catch (InterruptedException e) {
-			Utility.debug("[InterruptedException]: " + e.getMessage());
+			logger.debug("[InterruptedException]: " + e.getMessage());
 		} catch (IOException e) {
-			Utility.debug("[IOException]: " + e.getMessage());
+			logger.debug("[IOException]: " + e.getMessage());
 		}
 
 		String[] cmd = { "bash", "-c", "lqns -x " + modifiedInputPath };
@@ -132,16 +135,16 @@ public class LQNSolver {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 			while ((read = inputReader.readLine()) != null) {
-				Utility.debug("[Input Reader]: " + read);
+				logger.debug("[Input Reader]: " + read);
 				if (read.indexOf("error:") != -1 || read.indexOf("advisory:") != -1) {
-					Utility.debug("[error] above");
+					logger.debug("[error] above");
 					isError = true;
 				}
 			}
 			inputReader.close();
 			while ((read = errorReader.readLine()) != null) {
 				isError = true;
-				Utility.debug("[Error Reader]: " + read);
+				logger.debug("[Error Reader]: " + read);
 			}
 			errorReader.close();
 
@@ -151,9 +154,9 @@ public class LQNSolver {
 				return true;
 			}
 		} catch (IOException io) {
-			Utility.debug("[IOException]: " + io.getMessage());
+			logger.debug("[IOException]: " + io.getMessage());
 		} catch (InterruptedException intE) {
-			Utility.debug("[InterruptedException]: " + intE.getMessage());
+			logger.debug("[InterruptedException]: " + intE.getMessage());
 		}
 		return false;
 	}

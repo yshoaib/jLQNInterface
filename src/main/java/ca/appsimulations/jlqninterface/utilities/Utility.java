@@ -8,10 +8,13 @@ package ca.appsimulations.jlqninterface.utilities;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 public class Utility {
-
 	public static String listToQutotationStrArray(List list) {
 		StringBuilder strB = new StringBuilder();
 		strB.append("[");
@@ -27,18 +30,5 @@ public class Utility {
 		strB.append("]");
 
 		return strB.toString();
-	}
-
-	public static void debug(String str) {
-		System.err.println(str);
-	}
-
-	public static void print(String str) {
-		System.out.println(str);
-	}
-
-	public static void printAndDebug(String str) {
-		print(str);
-		debug(str);
 	}
 }
