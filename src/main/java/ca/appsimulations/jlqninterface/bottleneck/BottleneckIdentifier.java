@@ -10,15 +10,15 @@ package ca.appsimulations.jlqninterface.bottleneck;
 
 import java.util.ArrayList;
 
-import ca.appsimulations.jlqninterface.core.lqns.model.LqnModel;
-import ca.appsimulations.jlqninterface.core.lqns.entities.ActivityPhases;
-import ca.appsimulations.jlqninterface.core.lqns.entities.Entity;
-import ca.appsimulations.jlqninterface.core.lqns.entities.Entry;
-import ca.appsimulations.jlqninterface.core.lqns.entities.LqnConstants;
-import ca.appsimulations.jlqninterface.core.lqns.entities.Processor;
-import ca.appsimulations.jlqninterface.core.lqns.entities.ProcessorSchedulingType;
-import ca.appsimulations.jlqninterface.core.lqns.entities.Task;
-import ca.appsimulations.jlqninterface.core.lqns.entities.TaskSchedulingType;
+import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
+import ca.appsimulations.jlqninterface.lqn.entities.ActivityPhases;
+import ca.appsimulations.jlqninterface.lqn.entities.Entity;
+import ca.appsimulations.jlqninterface.lqn.entities.Entry;
+import ca.appsimulations.jlqninterface.lqn.entities.LqnConstants;
+import ca.appsimulations.jlqninterface.lqn.entities.Processor;
+import ca.appsimulations.jlqninterface.lqn.entities.ProcessorSchedulingType;
+import ca.appsimulations.jlqninterface.lqn.entities.Task;
+import ca.appsimulations.jlqninterface.lqn.entities.TaskSchedulingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
