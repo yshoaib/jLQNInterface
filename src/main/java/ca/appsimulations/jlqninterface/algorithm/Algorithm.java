@@ -1,5 +1,5 @@
 package ca.appsimulations.jlqninterface.algorithm;
-import ca.appsimulations.jlqninterface.core.lqns.model.LqnModel;
+import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
