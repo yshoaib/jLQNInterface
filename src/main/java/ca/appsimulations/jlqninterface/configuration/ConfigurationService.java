@@ -48,7 +48,7 @@ public class ConfigurationService {
 
 
 	@PostConstruct
-	public void initialize() throws IOException
+	public ConfigurationService initialize() throws IOException
 	{
 		ClassPathResource inputFileResource = new ClassPathResource(inputFilePath);
 		if(!inputFileResource.exists()){
@@ -69,6 +69,7 @@ public class ConfigurationService {
 		{
 			lqnXmlOutputFileResource.getFile().delete();
 		}
+		return this;
 	}
 
 	public String getInputFilePath() {
