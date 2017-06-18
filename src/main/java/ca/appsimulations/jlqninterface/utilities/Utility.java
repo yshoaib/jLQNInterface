@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class Utility {
-	public static String listToQutotationStrArray(List list) {
+	public static String listToQuotationStrArray(List list) {
 		StringBuilder strB = new StringBuilder();
 		strB.append("[");
 		if (list.size() > 0) {
