@@ -46,15 +46,6 @@ public class Task extends TaskType {
 	@Override
 	public String toString() {
 		return this.name;
-		/*
-		 * String str = ""; str = str + "Task " + this.id + " " + this.name +
-		 * "\n";
-		 * 
-		 * for (int i = 0; i < entries.size(); i++) { str = str + "\t\t" +
-		 * entries.get(i); }
-		 * 
-		 * return str;
-		 */
 	}
 
 	public void setProcessor(Processor processor) {
