@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -461,6 +463,10 @@ public class LqnModel {
 
     public int getSpareVMs() {
         return spareVMs;
+    }
+
+    public List<Task> getNonRefTasks(){
+        return tasks.stream().filter(task -> task.isRefTask() == false).collect(Collectors.toList());
     }
 
 }
