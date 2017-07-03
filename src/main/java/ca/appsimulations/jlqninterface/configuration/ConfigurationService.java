@@ -8,7 +8,9 @@ package ca.appsimulations.jlqninterface.configuration;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.io.IOException;
 
 @Service
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConfigurationService {
 
 	@Value("${inputFilePath}")
