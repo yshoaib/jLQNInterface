@@ -56,14 +56,14 @@ public class ConfigurationService {
 		}
 		this.inputFilePath = inputFileResource.getFile().getAbsolutePath();
 
-		this.autoInputFilePath= inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + autoInputFilePath;
+		this.autoInputFilePath= inputFilePath.substring(0, inputFilePath.lastIndexOf("\\")) + "\\" + autoInputFilePath;
 		ClassPathResource autoInputFileResource = new ClassPathResource(autoInputFilePath);
 		if(autoInputFileResource.exists())
 		{
 			autoInputFileResource.getFile().delete();
 		}
 
-		this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + lqnXmlOutputFilePath;
+		this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("\\")) + "\\" + lqnXmlOutputFilePath;
 		ClassPathResource lqnXmlOutputFileResource = new ClassPathResource(lqnXmlOutputFilePath);
 		if(lqnXmlOutputFileResource.exists())
 		{
