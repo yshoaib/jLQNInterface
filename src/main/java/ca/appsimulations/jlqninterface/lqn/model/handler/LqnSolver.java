@@ -26,15 +26,13 @@ public class LqnSolver {
 		StringBuilder strCmd = new StringBuilder();
 		Boolean isError = false;
 
-		// strCmd.append("lqns ");
-		// strCmd.append(inputPath + " > " + outputPath);
-		// System.out.println(strCmd.toString());
+		 strCmd.append("lqns ");
+		 strCmd.append(inputPath);
+		//System.out.println(strCmd.toString());
 		log.debug("----Running Solver----");
-		String[] cmd = { "bash", "-c", "lqns " + inputPath };
-
 
 		try {
-			Process p = Runtime.getRuntime().exec(cmd);
+			Process p = Runtime.getRuntime().exec(strCmd.toString());
 			p.waitFor();
 
 			String read;
