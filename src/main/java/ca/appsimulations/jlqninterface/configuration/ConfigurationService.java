@@ -8,6 +8,9 @@ package ca.appsimulations.jlqninterface.configuration;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Service
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConfigurationService {
 
 	@Value("${inputFilePath}")
@@ -46,9 +52,8 @@ public class ConfigurationService {
 	@Value("${bottleneckMaxBStrengthTaskOnly}")
 	private boolean bottleneckMaxBStrengthTaskOnly;
 
-
 	@PostConstruct
-	public void initialize() throws IOException
+	public ConfigurationService initialize() throws IOException
 	{
 		ClassPathResource inputFileResource = new ClassPathResource(inputFilePath);
 		if(!inputFileResource.exists()){
@@ -69,41 +74,7 @@ public class ConfigurationService {
 		{
 			lqnXmlOutputFileResource.getFile().delete();
 		}
+		return this;
 	}
 
-	public String getInputFilePath() {
-		return inputFilePath;
-	}
-
-	public String getAutoInputFilePath() {
-		return autoInputFilePath;
-	}
-
-	public double getResponseTimeObjective() {
-		return responseTimeObjective;
-	}
-
-	public int getMaxVMReplicas() {
-		return maxVMReplicas;
-	}
-
-	public int getMaxProcsPerVM() {
-		return maxProcsPerVM;
-	}
-
-	public int getSpareVMs() {
-		return spareVMs;
-	}
-
-	public double getSatThreshold() {
-		return satThreshold;
-	}
-
-	public String getLqnXmlOutputFilePath() {
-		return lqnXmlOutputFilePath;
-	}
-
-	public boolean isBottleneckMaxBStrengthTaskOnly() {
-		return bottleneckMaxBStrengthTaskOnly;
-	}
 }

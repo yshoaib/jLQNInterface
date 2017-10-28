@@ -60,10 +60,10 @@ public class BottleneckAlgorithm extends Algorithm {
 			fnfe.printStackTrace();
 		}
 
-		log.debug("Linking entries...");
 		lqnModel.LinkEntries();
 
 		// lqnParser.printProcessors();
+		log.debug("Linking entries...");
 		log.debug("Building DestTree...");
 		lqnModel.buildDestTree();
 		try {

@@ -176,4 +176,8 @@ public abstract class TaskType extends Entity {
 		}
 		return null;
 	}
+
+	public boolean isRefTask(){
+		return scheduling.equals(TaskSchedulingType.REF);
+	}
 }

@@ -39,7 +39,7 @@ public class LqnInputParser extends LqnParser {
 
 		switch (et) {
 			case PROCESSOR:
-				if(parseProcessors == true) {
+				if(parseProcessors) {
 					// name
 					curProcessor = lqnModel.getProcessorByName(attrName, true);
 
@@ -62,6 +62,8 @@ public class LqnInputParser extends LqnParser {
 					} else if ((attrReplication == null)) {
 						curProcessor.setReplication(LqnDefaults.PROCESSOR_REPLICATION.getValue());
 					}
+				}else {
+					curProcessor = new Processor(lqnModel);
 				}
 				break;
 			case RESULT_PROCESSOR:
