@@ -135,7 +135,7 @@ public class BottleneckAlgorithm extends Algorithm {
 		//update from in-memory representation of the model, output the updated model to outputFilePath
 		lqnModifier.parseAndUpdateXML(lqnInputParser.getLQXCData(false), inputFilePath, outputFilePath);
 
-		boolean result = LqnSolver.solveLqns(outputFilePath, outputFilePath + ".result", lqnResultParser, xmlOutputFilePath);
+		boolean result = LqnSolver.solveLqns(outputFilePath, lqnResultParser, xmlOutputFilePath);
 		if (result == false) {
 			log.info("Problem solving.");
 			return false;
