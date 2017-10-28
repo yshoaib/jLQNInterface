@@ -11,6 +11,7 @@ package ca.appsimulations.jlqninterface.configuration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -61,14 +62,23 @@ public class ConfigurationService {
 		}
 		this.inputFilePath = inputFileResource.getFile().getAbsolutePath();
 
-		this.autoInputFilePath= inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + autoInputFilePath;
+		if(SystemUtils.IS_OS_WINDOWS) {
+			this.autoInputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("\\")) + "\\" + autoInputFilePath;
+		}else{
+			this.autoInputFilePath= inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + autoInputFilePath;
+		}
+
 		ClassPathResource autoInputFileResource = new ClassPathResource(autoInputFilePath);
 		if(autoInputFileResource.exists())
 		{
 			autoInputFileResource.getFile().delete();
 		}
 
-		this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + lqnXmlOutputFilePath;
+		if(SystemUtils.IS_OS_WINDOWS){
+			this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("\\")) + "\\" + lqnXmlOutputFilePath;
+		}else{
+			this.lqnXmlOutputFilePath = inputFilePath.substring(0, inputFilePath.lastIndexOf("/")) + "/" + lqnXmlOutputFilePath;
+		}
 		ClassPathResource lqnXmlOutputFileResource = new ClassPathResource(lqnXmlOutputFilePath);
 		if(lqnXmlOutputFileResource.exists())
 		{
