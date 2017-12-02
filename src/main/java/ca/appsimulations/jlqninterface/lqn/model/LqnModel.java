@@ -11,6 +11,7 @@ package ca.appsimulations.jlqninterface.lqn.model;
 import ca.appsimulations.jlqninterface.configuration.ConfigurationService;
 import ca.appsimulations.jlqninterface.lqn.entities.*;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@NoArgsConstructor
 public class LqnModel {
     private ArrayList<Task> tasks;
     private ArrayList<Task> refTasks;
