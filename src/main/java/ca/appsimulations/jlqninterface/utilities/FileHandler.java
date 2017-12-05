@@ -2,20 +2,21 @@ package ca.appsimulations.jlqninterface.utilities;
 /**
  * @author Yasir Shoaib (2011,2012)
  * Contributors:
- *   Yasir Shoaib - Implementation
- *   
+ * Yasir Shoaib - Implementation
+ * <p>
  * Some LQN classes and their members are outlined as UML class diagrams in LQNS User Manual.
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
-import java.io.*;
+
+import java.io.File;
 
 public class FileHandler {
 
-	public static boolean doesFileExist(String fileName) {
-		File f = new File(fileName);
-		if (f.exists() && !f.isDirectory()) {
-			return true;
-		}
-		return false;
-	}
+    public static boolean doesFileExist(String fileName) {
+        File f = new File(fileName);
+        if (f.exists() && !f.isDirectory()) {
+            return true;
+        }
+        return false;
+    }
 }

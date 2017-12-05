@@ -9,14 +9,20 @@ import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
  * in LQNS User Manual. For details regarding these LQN classes and
  * members refer to LQNS User Manual.
  */
+public class TaskActivity extends TaskActivityGraph {
 
-public abstract class ActivityEntryType extends ActivityDefBase {
-    protected String first_activity;
+    public TaskActivity(LqnModel lqnModel) {
+        super(lqnModel, null, null);
+    }
 
-    public ActivityEntryType(LqnModel lqnModel, String name, double host_demand_mean, String first_activity) {
-        super(lqnModel, name, host_demand_mean);
+    @Override
+    public Result getResult() {
+        return null;
+    }
 
-        this.first_activity = first_activity;
+    @Override
+    public String getInformation() {
+        return null;
     }
 
 }
