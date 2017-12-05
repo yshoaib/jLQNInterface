@@ -23,7 +23,7 @@ public abstract class TaskType extends Entity {
 	protected int queue_length = 0;
 	protected boolean activity_graph;
 	protected int intially = multiplicity;
-	protected ArrayList<TaskActivities> taskActivities = new ArrayList<TaskActivities>();
+	protected ArrayList<TaskActivities> taskActivitiesList = new ArrayList<TaskActivities>();
 
 	public TaskType(LqnModel lqnModel, String name, boolean activity_graph) {
 		this.lqnModel = lqnModel;
@@ -119,15 +119,19 @@ public abstract class TaskType extends Entity {
 		this.subclass = subclass;
 	}
 
-	public ArrayList<TaskActivities> getTaskActivities() {
-		return taskActivities;
+	public ArrayList<TaskActivities> getTaskActivitiesList() {
+		return taskActivitiesList;
 	}
 
-	public TaskActivities generateTaskActivities() {
+	public TaskActivities buildTaskActivities() {
 		// TODO need to find taskActivitiesByName ...or similar functionality
 		TaskActivities ta = new TaskActivities(this.lqnModel);
-		taskActivities.add(ta);
+		addTaskActivities(ta);
 		return ta;
+	}
+
+	public void addTaskActivities(TaskActivities taskActivities){
+		taskActivitiesList.add(taskActivities);
 	}
 
 	public void addActivityToTaskActivity(ActivityDef a, TaskActivities tA) {
@@ -136,19 +140,19 @@ public abstract class TaskType extends Entity {
 
 	public ActivityDef getActivityAtIndex(int i) {
 		// TODO
-		if (taskActivities.isEmpty()) {
+		if (taskActivitiesList.isEmpty()) {
 			return null;
 		} else {
-			return taskActivities.get(0).getActivities().get(i);
+			return taskActivitiesList.get(0).getActivities().get(i);
 		}
 	}
 
 	public ActivityDef getActivityByName(String name) {
-		if (taskActivities.isEmpty()) {
+		if (taskActivitiesList.isEmpty()) {
 			return null;
 		}
 
-		for (TaskActivities tA : taskActivities) {
+		for (TaskActivities tA : taskActivitiesList) {
 			ArrayList<ActivityDef> activities = tA.getActivities();
 			int size = activities.size();
 			for (int i = 0; i < size; i++) {
