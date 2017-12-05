@@ -117,7 +117,7 @@ public class LqnInputParser extends LqnParser {
 				break;
 			case TASK_ACTIVITIES:
 				// TODO need to find task activity by name
-				curTaskActivities = curTask.generateTaskActivities();
+				curTaskActivities = curTask.buildTaskActivities();
 				isTaskActivities = true;
 				break;
 			case ACTIVITY:
