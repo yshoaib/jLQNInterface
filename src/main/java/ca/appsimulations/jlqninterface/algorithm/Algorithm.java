@@ -1,41 +1,30 @@
 package ca.appsimulations.jlqninterface.algorithm;
+
+import ca.appsimulations.jlqninterface.configuration.ConfigurationService;
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
- * 
- *         Some LQN classes and their members are outlined as UML class diagrams
- *         in LQNS User Manual. For details regarding these LQN classes and
- *         members refer to LQNS User Manual.
+ * <p>
+ * Some LQN classes and their members are outlined as UML class diagrams
+ * in LQNS User Manual. For details regarding these LQN classes and
+ * members refer to LQNS User Manual.
  */
 
+@Data
+@Accessors(fluent = true, chain = true)
 public abstract class Algorithm {
-	protected LqnModel lqnModel;
-	protected double satThreshold;
-	protected int maxVMReplicas;
-	protected int maxProcsPerVM;
-	protected int spareVMs;
-	protected double responseTimeObjective;
-	protected boolean bottleneckMaxBStrengthTaskOnly = true;
-	protected String inputFilePath;
-	protected String outputFilePath;
-	protected String xmlOutputFilePath;
+    protected LqnModel lqnModel;
+    protected ConfigurationService configurationService;
 
-	public Algorithm(LqnModel lqnModel) {
-		this.lqnModel = lqnModel;
-		this.satThreshold = lqnModel.getSatThreshold();
-		this.maxVMReplicas = lqnModel.getMaxVMReplicas();
-		this.responseTimeObjective = lqnModel.getResponseTimeObjective();
-		this.bottleneckMaxBStrengthTaskOnly = lqnModel.isBottleneckBStrengthTaskOnly();
-		this.maxProcsPerVM = lqnModel.getMaxProcsPerVM();
-		this.spareVMs = lqnModel.getSpareVMs();
-		this.inputFilePath = lqnModel.getInputFilePath();
-		this.outputFilePath = lqnModel.getAutoInputFilePath();
-		this.xmlOutputFilePath = lqnModel.getLqnXmlOutputFilePath();
+    public Algorithm(ConfigurationService configurationService, LqnModel lqnModel) {
+        this.lqnModel = lqnModel;
+        this.configurationService = configurationService;
+    }
 
-	}
+    public abstract void setup();
 
-	public abstract void setup();
-
-	public abstract void run();
+    public abstract void run();
 }

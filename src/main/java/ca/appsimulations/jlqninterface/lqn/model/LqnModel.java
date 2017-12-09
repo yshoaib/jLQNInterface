@@ -8,14 +8,12 @@ package ca.appsimulations.jlqninterface.lqn.model;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
-import ca.appsimulations.jlqninterface.configuration.ConfigurationService;
 import ca.appsimulations.jlqninterface.lqn.entities.*;
 import ca.appsimulations.jlqninterface.utilities.Utility;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,43 +22,17 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@Data
 @NoArgsConstructor
+@Accessors(fluent = true, chain = true)
 public class LqnModel {
-    private ArrayList<Task> tasks;
-    private ArrayList<Task> refTasks;
-    private ArrayList<Entry> entries;
-    private ArrayList<Processor> processors;
-    private ArrayList<ActivityDefBase> activities;
-    private String inputFilePath;
-    private String autoInputFilePath;
-    private String lqnXmlOutputFilePath;
-    private double responseTimeObjective;
-    private int maxVMReplicas;
-    private double satThreshold;
-    private boolean bottleneckBStrengthTaskOnly;
-    private int maxProcsPerVM;
-    private int spareVMs;
-    private Result result;
+    private ArrayList<Task> tasks = new ArrayList<>();
+    private ArrayList<Task> refTasks = new ArrayList<>();
+    private ArrayList<Entry> entries = new ArrayList<>();
+    private ArrayList<Processor> processors = new ArrayList<>();
+    private ArrayList<ActivityDefBase> activities = new ArrayList<>();
+    private Result result = new Result();
     private int maxBelow = 0;
-
-    @Autowired
-    public LqnModel(ConfigurationService configurationService) {
-        tasks = new ArrayList<Task>();
-        refTasks = new ArrayList<Task>();
-        entries = new ArrayList<Entry>();
-        processors = new ArrayList<Processor>();
-        activities = new ArrayList<ActivityDefBase>();
-        inputFilePath = configurationService.getInputFilePath();
-        autoInputFilePath = configurationService.getAutoInputFilePath();
-        lqnXmlOutputFilePath = configurationService.getLqnXmlOutputFilePath();
-        responseTimeObjective = configurationService.getResponseTimeObjective();
-        maxVMReplicas = configurationService.getMaxVMReplicas();
-        satThreshold = configurationService.getSatThreshold();
-        bottleneckBStrengthTaskOnly = configurationService.isBottleneckMaxBStrengthTaskOnly();
-        maxProcsPerVM = configurationService.getMaxProcsPerVM();
-        spareVMs = configurationService.getSpareVMs();
-        result = new Result();
-    }
 
     public void addTask(Task t) {
         tasks.add(t);
@@ -78,32 +50,24 @@ public class LqnModel {
         activities.add(a);
     }
 
-    public int getProcessorsSize() {
+    public int processorsSize() {
         return processors.size();
     }
 
-    public int getTasksSize() {
+    public int tasksSize() {
         return tasks.size();
     }
 
-    public Processor getProcessorAtIndex(int index) {
+    public Processor processorAtIndex(int index) {
         return processors.get(index);
     }
 
-    public Task getTaskAtIndex(int index) {
+    public Task taskAtIndex(int index) {
         return tasks.get(index);
     }
 
-    public Result getResult() {
-        return result;
-    }
 
-    public void setResult(Result result) {
-        this.result = result;
-    }
-
-    public ArrayList<Task> findRefTasks() {
-        ArrayList<Task> refTasks = new ArrayList<Task>();
+    public ArrayList<Task> buildRefTasksFromExistingTasks() {
         for (Task t : tasks) {
             if (t.getScheduling() == TaskSchedulingType.REF) {
                 refTasks.add(t);
@@ -112,9 +76,9 @@ public class LqnModel {
         return refTasks;
     }
 
-    // Call Entry.LinkEntries() after dest array is properly set.
+    // Call Entry.linkEntries() after dest array is properly set.
     // After this method, Task.buildDestTree() may be called.
-    public void LinkEntries() {
+    public void linkEntries() {
         int entriesSize = entries.size();
         for (int k = 0; k < entriesSize; k++) {
             Entry e = entries.get(k);
@@ -125,7 +89,7 @@ public class LqnModel {
             Entry e = entries.get(k);
             int size = e.getSyncDestStrSize();
             for (int i = 0; i < size; i++) {
-                Entry tmp = getEntryByName(e.getSyncDestStr(i));
+                Entry tmp = entryByName(e.getSyncDestStr(i));
                 if (tmp != null) {
                     e.addSyncDest(tmp);
                 }
@@ -135,8 +99,8 @@ public class LqnModel {
         }
     }
 
-    public ArrayList<Entry> getSrcEntries(String entryName) {
-        //find srcEntries without calling LinkEntries
+    public ArrayList<Entry> buildSrcEntries(String entryName) {
+        //find srcEntries without calling linkEntries
         ArrayList<Entry> srcEntries = new ArrayList<Entry>();
         int entriesSize = this.entries.size();
         for (int k = 0; k < entriesSize; k++) {
@@ -156,9 +120,10 @@ public class LqnModel {
         return Utility.listToQuotationStrArray(processors);
     }
 
-    public String getProcessorsCDataString() {
+    public String buildProcessorsCDataString() {
         StringBuilder strB = new StringBuilder();
-        strB.append("	processors = array_create(); \n" + "	processors = " + Utility.listToQuotationStrArray(processors) + ";\n" + "	procData = array_create();\n");
+        strB.append("	processors = array_create(); \n" + "	processors = " +
+                    Utility.listToQuotationStrArray(processors) + ";\n" + "	procData = array_create();\n");
 
         for (int i = 0; i < processors.size(); i++) {
             Processor p = processors.get(i);
@@ -168,7 +133,7 @@ public class LqnModel {
         return strB.toString();
     }
 
-    // Call buildDestTree() method after calling LinkEntries()
+    // Call buildDestTree() method after calling linkEntries()
     public void buildDestTree() {
         for (int i = 0; i < tasks.size(); i++) {
             Task t = tasks.get(i);
@@ -226,9 +191,10 @@ public class LqnModel {
         return Utility.listToQuotationStrArray(tasks);
     }
 
-    public String getTasksCDataString() {
+    public String buildTasksCDataString() {
         StringBuilder strB = new StringBuilder();
-        strB.append("	tasks = array_create(); \n").append("	tasks = " + Utility.listToQuotationStrArray(tasks) + ";\n");
+        strB.append("	tasks = array_create(); \n").append(
+                "	tasks = " + Utility.listToQuotationStrArray(tasks) + ";\n");
 
         strB.append("	taskData = array_create();\n");
 
@@ -241,10 +207,12 @@ public class LqnModel {
                 if (e.getEntryType() == EntryAcType.PH1PH2) {
                     if (e.getActivityAtPhase(1) != null) {
                         strB.append(e.getActivityAtPhase(1).getHost_demand_mean() + ", ");
-                    } else {
+                    }
+                    else {
                         strB.append("0.0 , ");
                     }
-                } else if (e.getEntryType() == EntryAcType.NONE) {
+                }
+                else if (e.getEntryType() == EntryAcType.NONE) {
                     // TODO
                     strB.append("-1" + ", ");
                 }
@@ -256,7 +224,7 @@ public class LqnModel {
         return strB.toString();
     }
 
-    public ArrayList<Task> getTaskWithBelowSize(int size) {
+    public ArrayList<Task> taskWithBelowSize(int size) {
         ArrayList<Task> list = new ArrayList<Task>();
         for (int i = 0; i < tasks.size(); i++) {
             Task t = tasks.get(i);
@@ -271,7 +239,7 @@ public class LqnModel {
 
         ArrayList<Task> newArray = new ArrayList<Task>();
         for (int j = maxBelow; j >= 0; j--) {
-            ArrayList<Task> list = getTaskWithBelowSize(j);
+            ArrayList<Task> list = taskWithBelowSize(j);
             for (int i = 0; i < list.size(); i++) {
                 Task t = list.get(i);
                 newArray.add(t);
@@ -293,7 +261,7 @@ public class LqnModel {
         processors.clear();
     }
 
-    public String getBelowCDataString() {
+    public String buildBelowCDataString() {
         StringBuilder strB = new StringBuilder();
         strB.append("	Below = array_create(); \n");
         for (int i = 0; i < tasks.size(); i++) {
@@ -306,39 +274,12 @@ public class LqnModel {
         return strB.toString();
     }
 
-    public ArrayList<Processor> getProcessors() {
-        return processors;
+
+    public Processor processorByName(String name) {
+        return processorByName(name, false);
     }
 
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
-    public ArrayList<Entry> getEntries() {
-        return entries;
-    }
-
-    public ArrayList<ActivityDefBase> getActivities() {
-        return activities;
-    }
-
-    public String getInputFilePath() {
-        return inputFilePath;
-    }
-
-    public String getAutoInputFilePath() {
-        return autoInputFilePath;
-    }
-
-    public String getLqnXmlOutputFilePath() {
-        return lqnXmlOutputFilePath;
-    }
-
-    public Processor getProcessorByName(String name) {
-        return getProcessorByName(name, false);
-    }
-
-    public Processor getProcessorByName(String name, boolean createNew) {
+    public Processor processorByName(String name, boolean createNew) {
         int size = processors.size();
         for (int i = 0; i < size; i++) {
             Processor p = processors.get(i);
@@ -353,7 +294,7 @@ public class LqnModel {
         return null;
     }
 
-    public Task getTaskByName(String name) {
+    public Task taskByName(String name) {
         ArrayList<Task> ts = tasks;
         int size = ts.size();
         for (int i = 0; i < size; i++) {
@@ -366,9 +307,11 @@ public class LqnModel {
         return null;
     }
 
-    public Task getTaskByName(String name, Processor p, boolean createNew) {
+    public Task taskByName(String name, Processor p, boolean createNew) {
         Task t = findTaskInProcessor(name, p);
-        if (t != null) return t;
+        if (t != null) {
+            return t;
+        }
 
         if (createNew) {
             return (new Task(this, name, p));
@@ -378,8 +321,8 @@ public class LqnModel {
     }
 
     private Task findTaskInProcessor(String name, Processor p) {
-        if(p == null){
-            return  null;
+        if (p == null) {
+            return null;
         }
         ArrayList<Task> ts = p.getTasks();
         int size = ts.size();
@@ -392,7 +335,7 @@ public class LqnModel {
         return null;
     }
 
-    public Entry getEntryByName(String name) {
+    public Entry entryByName(String name) {
         int size = entries.size();
         for (int i = 0; i < size; i++) {
             Entry e = entries.get(i);
@@ -404,7 +347,7 @@ public class LqnModel {
         return null;
     }
 
-    public Entry getEntryByName(String name, Task t, boolean createNew) {
+    public Entry entryByName(String name, Task t, boolean createNew) {
         ArrayList<Entry> theEntries = t.getEntries();
         int size = theEntries.size();
         for (int i = 0; i < size; i++) {
@@ -421,53 +364,31 @@ public class LqnModel {
         return null;
     }
 
-    public ActivityPhases getActivityPHByName(String name, Entry e, int phase, boolean createNew) {
+    public ActivityPhases activityPHByName(String name, Entry e, int phase, boolean createNew) {
         ActivityDefBase a = e.getActivityByName(name);
         if ((a != null) && (a.getName().equals(name))) {
             return (ActivityPhases) a;
-        } else if (createNew) {
+        }
+        else if (createNew) {
             return (new ActivityPhases(this, name, e, phase));
         }
 
         return null;
     }
 
-    public ActivityDef getActivityDefByName(String name, Task t, TaskActivities tA, Entry e, boolean createNew) {
+    public ActivityDef activityDefByName(String name, Task t, TaskActivity tA, Entry e, boolean createNew) {
         ActivityDef a = t.getActivityByName(name, tA);
         if ((a != null) && (a.getName().equals(name))) {
             return a;
-        } else if (createNew) {
+        }
+        else if (createNew) {
             return (new ActivityDef(this, name, t, tA, e));
         }
 
         return null;
     }
 
-    public double getResponseTimeObjective() {
-        return responseTimeObjective;
-    }
-
-    public int getMaxVMReplicas() {
-        return maxVMReplicas;
-    }
-
-    public double getSatThreshold() {
-        return satThreshold;
-    }
-
-    public boolean isBottleneckBStrengthTaskOnly() {
-        return bottleneckBStrengthTaskOnly;
-    }
-
-    public int getMaxProcsPerVM() {
-        return maxProcsPerVM;
-    }
-
-    public int getSpareVMs() {
-        return spareVMs;
-    }
-
-    public List<Task> getNonRefTasks(){
+    public List<Task> nonRefTasks() {
         return tasks.stream().filter(task -> task.isRefTask() == false).collect(Collectors.toList());
     }
 

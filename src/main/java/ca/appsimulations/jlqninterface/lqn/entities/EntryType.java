@@ -1,135 +1,121 @@
 package ca.appsimulations.jlqninterface.lqn.entities;
-import java.util.ArrayList;
 
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 
+import java.util.ArrayList;
+
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
- * 
- *         Some LQN classes and their members are outlined as UML class diagrams
- *         in LQNS User Manual. For details regarding these LQN classes and
- *         members refer to LQNS User Manual.
+ * <p>
+ * Some LQN classes and their members are outlined as UML class diagrams
+ * in LQNS User Manual. For details regarding these LQN classes and
+ * members refer to LQNS User Manual.
  */
 
 public abstract class EntryType extends Entity {
 
-	protected String name;
-	protected EntryAcType entryType;
-	protected float open_arrival_rate;
-	protected int priority;
-	protected EntrySemaphoreType semaphore;
+    protected String name;
+    protected EntryAcType entryType;
+    protected double open_arrival_rate;
+    protected int priority;
+    protected EntrySemaphoreType semaphore;
+    protected EntryPhaseActivities entryPhaseActivities;
 
-	protected EntryPhaseActivities entryPhaseActivities;
+    public EntryType(LqnModel lqnModel, String name, EntryAcType entryType) {
+        this.lqnModel = lqnModel;
+        this.name = name;
+        this.entryType = entryType;
+        this.entryPhaseActivities = new EntryPhaseActivities(this.lqnModel);
+    }
 
-	public EntryType(LqnModel lqnModel, String name, EntryAcType entryType) {
-		this.lqnModel = lqnModel;
-		this.name = name;
-		this.entryType = entryType;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public double getOpen_arrival_rate() {
+        return open_arrival_rate;
+    }
 
-	public float getOpen_arrival_rate() {
-		return open_arrival_rate;
-	}
+    public void setOpen_arrival_rate(double openArrivalRate) {
+        open_arrival_rate = openArrivalRate;
+    }
 
-	public void setOpen_arrival_rate(float openArrivalRate) {
-		open_arrival_rate = openArrivalRate;
-	}
+    public int getPriority() {
+        return priority;
+    }
 
-	public int getPriority() {
-		return priority;
-	}
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
+    public EntrySemaphoreType getSemaphore() {
+        return semaphore;
+    }
 
-	public EntrySemaphoreType getSemaphore() {
-		return semaphore;
-	}
+    public void setSemaphore(EntrySemaphoreType semaphore) {
+        this.semaphore = semaphore;
+    }
 
-	public void setSemaphore(EntrySemaphoreType semaphore) {
-		this.semaphore = semaphore;
-	}
+    public EntryAcType getEntryType() {
+        return entryType;
+    }
 
-	public EntryAcType getEntryType() {
-		return entryType;
-	}
+    public void setEntryType(EntryAcType entryType) {
+        this.entryType = entryType;
+    }
 
-	public void setEntryType(EntryAcType entryType) {
-		this.entryType = entryType;
-	}
+    public EntryPhaseActivities getEntryPhaseActivities() {
+        return entryPhaseActivities;
+    }
 
-	public EntryPhaseActivities generateEntryPhaseActivities() {
-		if (entryPhaseActivities == null) {
-			entryPhaseActivities = new EntryPhaseActivities(this.lqnModel);
-		}
-		return entryPhaseActivities;
-	}
+    public void setEntryPhaseActivities(EntryPhaseActivities entryPhaseActivities) {
+        this.entryPhaseActivities = entryPhaseActivities;
+    }
 
-	/*
-	 * public void setEntryActivities(EntryPhaseActivities e) {
-	 * entryPhaseActivities = e; }
-	 */
+    public void addActivity(ActivityPhases activity, int phase) {
+        entryPhaseActivities.addActivityPhase(activity, phase);
+    }
 
-	/*
-	 * public ArrayList<ActivityDefBase> getActivities() { //return activities;
-	 * }
-	 */
+    public ActivityPhases getActivityByName(String name) {
+        if (entryPhaseActivities == null) {
+            return null;
+        }
 
-	/*
-	 * public ArrayList<ActivityPhases> getActivities() {
-	 * if(entryPhaseActivities == null) { return null; } return
-	 * entryPhaseActivities.getActivityPhases(); }
-	 */
+        int size = entryPhaseActivities.getActivitiesSize();
+        for (int i = 0; i < size; i++) {
+            ActivityPhases a = entryPhaseActivities.getActivityAtPhase(i + 1);
+            if (a.getName().equals(name)) {
+                return a;
+            }
+        }
 
-	public void addActivity(ActivityPhases activity, int phase) {
-		entryPhaseActivities.addActivityPhase(activity, phase);
-	}
+        return null;
+    }
 
-	public ActivityPhases getActivityByName(String name) {
-		if (entryPhaseActivities == null) {
-			return null;
-		}
+    public ArrayList<ActivityPhases> getActivitiesByStrDest(String destStr) {
+        ArrayList<ActivityPhases> al = new ArrayList<ActivityPhases>();
 
-		int size = entryPhaseActivities.getActivitiesSize();
-		for (int i = 0; i < size; i++) {
-			ActivityPhases a = entryPhaseActivities.getActivityAtPhase(i + 1);
-			if (a.getName().equals(name)) {
-				return a;
-			}
-		}
+        for (int phase = 1; phase < entryPhaseActivities.getActivitiesSize() + 1; phase++) {
+            ActivityPhases ap = entryPhaseActivities.getActivityAtPhase(phase);
+            SynchCall s = ap.getSynchCallByStrDestEntry(destStr);
 
-		return null;
-	}
+            if (s != null) {
+                al.add(ap);
+            }
+        }
+        return al;
+    }
 
-	public ArrayList<ActivityPhases> getActivitiesByStrDest(String destStr) {
-		ArrayList<ActivityPhases> al = new ArrayList<ActivityPhases>();
+    public ActivityDefBase getActivityAtPhase(int phase) {
+        return entryPhaseActivities.getActivityAtPhase(phase);
+    }
 
-		for (int phase = 1; phase < entryPhaseActivities.getActivitiesSize() + 1; phase++) {
-			ActivityPhases ap = entryPhaseActivities.getActivityAtPhase(phase);
-			SynchCall s = ap.getSynchCallByStrDestEntry(destStr);
-
-			if (s != null) {
-				al.add(ap);
-			}
-		}
-		return al;
-	}
-
-	public ActivityDefBase getActivityAtPhase(int phase) {
-		return entryPhaseActivities.getActivityAtPhase(phase);
-	}
-
-	public int getActivityPhasesSize() {
-		return entryPhaseActivities.getActivitiesSize();
-	}
+    public int getActivityPhasesSize() {
+        return entryPhaseActivities.getActivitiesSize();
+    }
 
 }
