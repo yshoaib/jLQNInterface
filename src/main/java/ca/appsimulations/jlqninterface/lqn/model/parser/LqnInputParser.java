@@ -2,10 +2,15 @@ package ca.appsimulations.jlqninterface.lqn.model.parser;
 
 import ca.appsimulations.jlqninterface.lqn.entities.*;
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
+import ca.appsimulations.jlqninterface.lqn.model.LqnXmlDetails;
+import ca.appsimulations.jlqninterface.lqn.model.SolverParams;
 import ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes;
 import ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlElements;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+import static ca.appsimulations.jlqninterface.lqn.entities.LqnDefaults.*;
+import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes.*;
 
 /**
  * @author Yasir Shoaib (2011,2012)
@@ -15,7 +20,8 @@ import org.xml.sax.SAXException;
  * Some LQN classes and their members are outlined as UML class diagrams in LQNS User Manual.
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
-public class LqnInputParser extends LqnParser {
+public class LqnInputParser extends AbstractLqnParser {
+    private static String XML_NS_URL = "http://www.w3.org/2001/XMLSchema-instance";
 
     private final boolean parseProcessors;
 
@@ -33,19 +39,43 @@ public class LqnInputParser extends LqnParser {
             return;
         }
 
-        String attrName = attributes.getValue(LqnXmlAttributes.NAME.toString());
-        String attrScheduling = attributes.getValue(LqnXmlAttributes.SCHEDULING.toString());
-        String attrMultiplicity = attributes.getValue(LqnXmlAttributes.MULTIPLICITY.toString());
-        String attrReplication = attributes.getValue(LqnXmlAttributes.REPLICATION.toString());
+        String attrName = getAttributeValue(attributes, NAME);
+        String attrScheduling = getAttributeValue(attributes, SCHEDULING);
+        String attrMultiplicity = getAttributeValue(attributes, MULTIPLICITY);
+        String attrReplication = getAttributeValue(attributes, REPLICATION);
 
         switch (et) {
+            case LQN_MODEL:
+                lqnModel.xmlDetails(LqnXmlDetails
+                                            .builder()
+                                            .name(attrName)
+                                            .xmlnsXsi(XML_NS_URL)
+                                            .description(getAttributeValue(attributes, DESCRIPTION))
+                                            .schemaLocation(getAttributeValue(attributes, SCHEMA_LOCATION))
+                                            .build());
+                break;
+            case SOLVER_PARAMS:
+                lqnModel.solverParams(SolverParams
+                                              .builder()
+                                              .comment(getAttributeValue(attributes, COMMENT))
+                                              .convergence(Double.parseDouble(getAttributeValue(attributes,
+                                                                                                CONVERGENCE_VALUE)))
+                                              .iterationLimit(Integer.parseInt(getAttributeValue(attributes,
+                                                                                                 ITERATION_LIMIT)))
+                                              .underRelaxCoeff(Double.parseDouble(getAttributeValue(attributes,
+                                                                                                    UNDER_RELAX_COEFF)))
+                                              .printInterval(Integer.parseInt(getAttributeValue(attributes,
+                                                                                                PRINT_INTERVAL)))
+
+                                              .build());
+                break;
             case PROCESSOR:
                 if (parseProcessors) {
                     // name
                     curProcessor = lqnModel.processorByName(attrName, true);
 
                     // scheduling
-                    ProcessorSchedulingType psType = ProcessorSchedulingType.getValue(attrScheduling);
+                    ProcessorSchedulingType psType = ProcessorSchedulingType.from(attrScheduling);
                     curProcessor.setScheduling(psType);
 
                     // multiplicity
@@ -56,7 +86,7 @@ public class LqnInputParser extends LqnParser {
                         curProcessor.setMultiplicity(Integer.parseInt(attrMultiplicity));
                     }
                     else if ((attrMultiplicity == null)) {
-                        curProcessor.setMultiplicity(LqnDefaults.PROCESSOR_MULTIPLICITY.getValue());
+                        curProcessor.setMultiplicity(PROCESSOR_MULTIPLICITY.getValue());
                     }
 
                     // replication
@@ -64,7 +94,7 @@ public class LqnInputParser extends LqnParser {
                         curProcessor.setReplication(Integer.parseInt(attrReplication));
                     }
                     else if ((attrReplication == null)) {
-                        curProcessor.setReplication(LqnDefaults.PROCESSOR_REPLICATION.getValue());
+                        curProcessor.setReplication(PROCESSOR_REPLICATION.getValue());
                     }
                 }
                 else {
@@ -102,7 +132,7 @@ public class LqnInputParser extends LqnParser {
                     curTask.setReplication(Integer.parseInt(attrReplication));
                 }
                 else if ((attrReplication == null)) {
-                    curTask.setReplication(LqnDefaults.TASK_REPLICATION.getValue());
+                    curTask.setReplication(TASK_REPLICATION.getValue());
                 }
 
                 break;
@@ -110,7 +140,7 @@ public class LqnInputParser extends LqnParser {
                 break;
 
             case ENTRY:
-                String attrType = attributes.getValue(LqnXmlAttributes.TYPE.toString());
+                String attrType = getAttributeValue(attributes, TYPE);
 
                 // name,type
                 curEntry = lqnModel.entryByName(attrName, curTask, true);
@@ -128,9 +158,9 @@ public class LqnInputParser extends LqnParser {
                 isTaskActivities = true;
                 break;
             case ACTIVITY:
-                String attrBoundEntry = attributes.getValue(LqnXmlAttributes.BOUND_TO_ENTRY.toString());
-                String attrPhase = attributes.getValue(LqnXmlAttributes.PHASE.toString());
-                String attrHostDemand = attributes.getValue(LqnXmlAttributes.HOST_DEMAND_MEAN.toString());
+                String attrBoundEntry = getAttributeValue(attributes, BOUND_TO_ENTRY);
+                String attrPhase = getAttributeValue(attributes, PHASE);
+                String attrHostDemand = getAttributeValue(attributes, HOST_DEMAND_MEAN);
 
                 if (isTaskActivities) {
                     // bound-to-entry
@@ -169,10 +199,10 @@ public class LqnInputParser extends LqnParser {
 
             case SYNCH_CALL:
                 // dest, callsmean, fanin,fanout
-                String attrDest = attributes.getValue(LqnXmlAttributes.DEST.toString());
-                String attrCallsMean = attributes.getValue(LqnXmlAttributes.CALLS_MEAN.toString());
-                String attrFanin = attributes.getValue(LqnXmlAttributes.FANIN.toString());
-                String attrFanout = attributes.getValue(LqnXmlAttributes.FANOUT.toString());
+                String attrDest = getAttributeValue(attributes, DEST);
+                String attrCallsMean = getAttributeValue(attributes, CALLS_MEAN);
+                String attrFanin = getAttributeValue(attributes, FANIN);
+                String attrFanout = getAttributeValue(attributes, FANOUT);
                 double callsMean = Double.parseDouble(attrCallsMean);
 
                 ActivityPhases ap = null;
@@ -207,6 +237,10 @@ public class LqnInputParser extends LqnParser {
             default:
                 break;
         }
+    }
+
+    private String getAttributeValue(Attributes attributes, LqnXmlAttributes name) {
+        return attributes.getValue(name.value());
     }
 
     @Override

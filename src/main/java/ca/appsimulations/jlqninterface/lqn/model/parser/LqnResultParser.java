@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
  * Some LQN classes and their members are outlined as UML class diagrams in LQNS User Manual.
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
-public class LqnResultParser extends LqnParser {
+public class LqnResultParser extends AbstractLqnParser {
 
     public LqnResultParser(LqnModel lqnModel) {
         super(lqnModel);

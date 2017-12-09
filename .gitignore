@@ -20,3 +20,5 @@ target/
 #LQNS
 *.out
 *.lqxo
+
+test-output.lqnx

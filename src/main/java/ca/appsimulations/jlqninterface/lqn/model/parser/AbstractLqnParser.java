@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Slf4j
-public abstract class LqnParser extends DefaultHandler {
+public abstract class AbstractLqnParser extends DefaultHandler {
     // LQX CData Parameters
     protected static final int defaultSpacing = 15;
     protected Processor curProcessor = null;
@@ -35,13 +35,13 @@ public abstract class LqnParser extends DefaultHandler {
     protected boolean isTaskActivities = false;
     protected boolean isEntryPhaseActivities = false;
 
-    public LqnParser(LqnModel lqnModel) {
+    public AbstractLqnParser(LqnModel lqnModel) {
         this.lqnModel = lqnModel;
     }
 
     public static String getVariableInitializationCData() {
         StringBuilder cData = new StringBuilder();
-        cData.append("\n" + "	DefaultSpacing = " + LqnParser.defaultSpacing + "; \n" +
+        cData.append("\n" + "	DefaultSpacing = " + AbstractLqnParser.defaultSpacing + "; \n" +
                      "	satArray = array_create_map(); \n" + "	BStrength = array_create_map();\n"
                      + "	taskData = array_create(); \n" + "	printData = array_create(); \n" + "\n");
 
@@ -208,10 +208,10 @@ public abstract class LqnParser extends DefaultHandler {
             cData.append(lqnModel.buildProcessorsCDataString() + "\n\n");
             cData.append(lqnModel.buildTasksCDataString() + "\n\n");
             cData.append(lqnModel.buildBelowCDataString() + "\n\n");
-            cData.append(LqnParser.getLQNSolveCData());
-            cData.append(LqnParser.getTasksBStrengthCData());
-            cData.append(LqnParser.getProcessorsBStrengthCData());
-            cData.append(LqnParser.getBStrengthPrintAllCData());
+            cData.append(AbstractLqnParser.getLQNSolveCData());
+            cData.append(AbstractLqnParser.getTasksBStrengthCData());
+            cData.append(AbstractLqnParser.getProcessorsBStrengthCData());
+            cData.append(AbstractLqnParser.getBStrengthPrintAllCData());
         }
         return cData.toString();
     }

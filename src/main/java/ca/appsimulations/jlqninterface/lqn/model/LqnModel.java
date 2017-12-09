@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Accessors(fluent = true, chain = true)
 public class LqnModel {
+    private LqnXmlDetails xmlDetails;
+    private SolverParams solverParams;
     private ArrayList<Task> tasks = new ArrayList<>();
     private ArrayList<Task> refTasks = new ArrayList<>();
     private ArrayList<Entry> entries = new ArrayList<>();

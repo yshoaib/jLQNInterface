@@ -1,5 +1,8 @@
 package ca.appsimulations.jlqninterface.lqn.entities;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
  * @author Yasir Shoaib (2011,2012)
  * Contributors:
@@ -9,6 +12,8 @@ package ca.appsimulations.jlqninterface.lqn.entities;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+@Getter
+@Accessors(fluent = true, chain = true)
 public enum ProcessorSchedulingType {
     FIFO("fcfs"),
     // First-in, first out (first-come, first-served). Tasks are
@@ -38,15 +43,15 @@ public enum ProcessorSchedulingType {
     // present.
     INF("inf");
 
-    private String strValue;
+    private String value;
 
     ProcessorSchedulingType(String value) {
-        this.strValue = value;
+        this.value = value;
     }
 
-    public static ProcessorSchedulingType getValue(String input) {
+    public static ProcessorSchedulingType from(String input) {
         for (ProcessorSchedulingType pst : ProcessorSchedulingType.values()) {
-            if (pst.strValue.equalsIgnoreCase(input)) {
+            if (pst.value.equalsIgnoreCase(input)) {
                 return pst;
             }
         }
@@ -55,6 +60,6 @@ public enum ProcessorSchedulingType {
 
     @Override
     public String toString() {
-        return strValue;
+        return value;
     }
 }

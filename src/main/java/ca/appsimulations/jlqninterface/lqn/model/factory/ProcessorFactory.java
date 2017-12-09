@@ -1,4 +1,4 @@
-package ca.appsimulations.jlqninterface.lqn.model.builder;
+package ca.appsimulations.jlqninterface.lqn.model.factory;
 
 import ca.appsimulations.jlqninterface.lqn.entities.LqnConstants;
 import ca.appsimulations.jlqninterface.lqn.entities.LqnDefaults;
@@ -6,7 +6,7 @@ import ca.appsimulations.jlqninterface.lqn.entities.Processor;
 import ca.appsimulations.jlqninterface.lqn.entities.ProcessorSchedulingType;
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 
-public class ProcessorBuilder {
+public class ProcessorFactory {
 
     public static Processor build(LqnModel lqnModel,
                                   String name,
