@@ -60,8 +60,9 @@ public class Processor extends ProcessorType {
         return result;
     }
 
-    public void setResult(Result result) {
+    public Processor setResult(Result result) {
         this.result = result;
+        return this;
     }
 
     public String getInformation() {
@@ -82,8 +83,9 @@ public class Processor extends ProcessorType {
         return isDuplicate;
     }
 
-    public void setDuplicate(boolean isDuplicate) {
+    public Processor setDuplicate(boolean isDuplicate) {
         this.isDuplicate = isDuplicate;
+        return this;
     }
 
     public Processor getDuplicatedFrom() {

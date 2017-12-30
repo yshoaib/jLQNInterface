@@ -1,5 +1,8 @@
 package ca.appsimulations.jlqninterface.lqn.entities;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
  * @author Yasir Shoaib (2011,2012) Contributors: Yasir Shoaib - Implementation
  * <p>
@@ -8,6 +11,8 @@ package ca.appsimulations.jlqninterface.lqn.entities;
  * members refer to LQNS User Manual.
  */
 
+@Getter
+@Accessors(fluent = true, chain = true)
 public enum TaskSchedulingType {
     FIFO("fcfs"),
     // First-in, first out (first-come, first-served). Tasks are
@@ -24,15 +29,15 @@ public enum TaskSchedulingType {
     REF("ref"),
     INF("inf");
 
-    private String strValue;
+    private String value;
 
     TaskSchedulingType(String value) {
-        this.strValue = value;
+        this.value = value;
     }
 
     public static TaskSchedulingType getValue(String input) {
         for (TaskSchedulingType tsk : TaskSchedulingType.values()) {
-            if (tsk.strValue.equalsIgnoreCase(input)) {
+            if (tsk.value.equalsIgnoreCase(input)) {
                 return tsk;
             }
         }
@@ -41,6 +46,6 @@ public enum TaskSchedulingType {
 
     @Override
     public String toString() {
-        return strValue;
+        return value;
     }
 }

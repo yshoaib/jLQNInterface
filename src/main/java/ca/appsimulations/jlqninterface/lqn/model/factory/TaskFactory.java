@@ -1,9 +1,12 @@
-package ca.appsimulations.jlqninterface.lqn.model.builder;
+package ca.appsimulations.jlqninterface.lqn.model.factory;
 
-import ca.appsimulations.jlqninterface.lqn.entities.*;
+import ca.appsimulations.jlqninterface.lqn.entities.LqnDefaults;
+import ca.appsimulations.jlqninterface.lqn.entities.Processor;
+import ca.appsimulations.jlqninterface.lqn.entities.Task;
+import ca.appsimulations.jlqninterface.lqn.entities.TaskSchedulingType;
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 
-public class TaskBuilder {
+public class TaskFactory {
 
     public static Task build(String name,
                              LqnModel lqnModel,
@@ -15,12 +18,11 @@ public class TaskBuilder {
                              processor);
         if (refTask) {
             task.setScheduling(TaskSchedulingType.REF);
-            task.setMultiplicity(LqnConstants.INFINITY.getConstantValue());
         }
         else {
             task.setScheduling(TaskSchedulingType.FIFO);
-            task.setMultiplicity(threads);
         }
+        task.setMultiplicity(threads);
         task.setReplication(LqnDefaults.TASK_REPLICATION.getValue());
         return task;
     }

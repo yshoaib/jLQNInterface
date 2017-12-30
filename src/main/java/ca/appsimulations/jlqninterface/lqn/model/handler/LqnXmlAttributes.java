@@ -16,8 +16,10 @@ import lombok.experimental.Accessors;
 public enum LqnXmlAttributes {
     NAME("name"),
     DESCRIPTION("description"),
+    XMLNS_XSI("xmlns:xsi"),
+    SCHEMA_LOCATION("xsi:noNamespaceSchemaLocation"),
     COMMENT("comment"),
-    CONVERGE_VALUE("conv_val"),
+    CONVERGENCE_VALUE("conv_val"),
     ITERATION_LIMIT("it_limit"),
     UNDER_RELAX_COEFF("underrelax_coeff"),
     PRINT_INTERVAL("print_int"),

@@ -28,32 +28,36 @@ public abstract class ProcessorType extends Entity {
         return name;
     }
 
-    public void setName(String name) {
+    public ProcessorType setName(String name) {
         this.name = name;
+        return this;
     }
 
     public double getSpeedFactor() {
         return speedFactor;
     }
 
-    public void setSpeedFactor(double speedFactor) {
+    public ProcessorType setSpeedFactor(double speedFactor) {
         this.speedFactor = speedFactor;
+        return this;
     }
 
     public ProcessorSchedulingType getScheduling() {
         return scheduling;
     }
 
-    public void setScheduling(ProcessorSchedulingType scheduling) {
+    public ProcessorType setScheduling(ProcessorSchedulingType scheduling) {
         this.scheduling = scheduling;
+        return this;
     }
 
     public int getMultiplicity() {
         return multiplicity;
     }
 
-    public void setMultiplicity(int multiplicity) {
+    public ProcessorType setMultiplicity(int multiplicity) {
         this.multiplicity = multiplicity;
+        return this;
     }
 
     public String getMutiplicityString() {
@@ -69,15 +73,17 @@ public abstract class ProcessorType extends Entity {
         return replication;
     }
 
-    public void setReplication(int replication) {
+    public ProcessorType setReplication(int replication) {
         this.replication = replication;
+        return this;
     }
 
     public double getQuantum() {
         return quantum;
     }
 
-    public void setQuantum(double quantum) {
+    public ProcessorType setQuantum(double quantum) {
         this.quantum = quantum;
+        return this;
     }
 }
