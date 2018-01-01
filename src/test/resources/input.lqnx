@@ -15,7 +15,7 @@
             </entry>
         </task>
     </processor>
-    <processor name="pTaskA" scheduling="ps">
+    <processor name="pTaskA" scheduling="ps" quantum="0.2">
         <task name="TaskA" scheduling="fcfs" multiplicity="10">
             <entry name="funcA1" type="PH1PH2">
                 <entry-phase-activities>
@@ -26,7 +26,7 @@
             </entry>
         </task>
     </processor>
-    <processor name="pTaskB" scheduling="ps">
+    <processor name="pTaskB" scheduling="ps" quantum="0.2">
         <task name="TaskB" scheduling="fcfs" multiplicity="10">
             <entry name="funcB1" type="PH1PH2">
                 <entry-phase-activities>
@@ -37,7 +37,7 @@
             </entry>
         </task>
     </processor>
-    <processor name="pTaskC" scheduling="ps">
+    <processor name="pTaskC" scheduling="ps" quantum="0.2">
         <task name="TaskC" scheduling="fcfs" multiplicity="10">
             <entry name="funcC1" type="PH1PH2">
                 <entry-phase-activities>
@@ -48,7 +48,7 @@
             </entry>
         </task>
     </processor>
-    <processor name="pTaskD" scheduling="ps">
+    <processor name="pTaskD" scheduling="ps" quantum="0.2">
         <task name="TaskD" scheduling="fcfs" multiplicity="10">
             <entry name="funcD1" type="PH1PH2">
                 <entry-phase-activities>
