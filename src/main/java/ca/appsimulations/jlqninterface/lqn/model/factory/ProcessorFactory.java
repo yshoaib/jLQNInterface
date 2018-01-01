@@ -21,6 +21,7 @@ public class ProcessorFactory {
         else {
             processor.setScheduling(ProcessorSchedulingType.PS);
             processor.setMultiplicity(numOfCores);
+            processor.setQuantum(0.2);
         }
         processor.setReplication(LqnDefaults.PROCESSOR_REPLICATION.getValue());
         return processor;

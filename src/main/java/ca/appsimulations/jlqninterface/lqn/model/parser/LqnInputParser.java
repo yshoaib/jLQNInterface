@@ -96,6 +96,11 @@ public class LqnInputParser extends AbstractLqnParser {
                     else if ((attrReplication == null)) {
                         curProcessor.setReplication(PROCESSOR_REPLICATION.getValue());
                     }
+
+                    String attrQuantum = getAttributeValue(attributes, QUANTUM);
+                    if (psType == ProcessorSchedulingType.PS && attrQuantum != null) {
+                        curProcessor.setQuantum(Double.parseDouble(attrQuantum));
+                    }
                 }
                 else {
                     curProcessor = new Processor(lqnModel);
