@@ -27,6 +27,7 @@ public enum LqnXmlAttributes {
     SCHEDULING("scheduling"),
     UTILIZATION("utilization"),
     THROUGHPUT("throughput"),
+    QUANTUM("quantum"),
     PROB("prob"),
     DEST("dest"),
     PHASE("phase"),

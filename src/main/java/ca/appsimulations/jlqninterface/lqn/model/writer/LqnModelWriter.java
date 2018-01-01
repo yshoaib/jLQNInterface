@@ -73,6 +73,9 @@ public class LqnModelWriter {
             Element processorElem = doc.createElement(PROCESSOR.value());
             processorElem.setAttribute(NAME.value(), processor.getName());
             processorElem.setAttribute(SCHEDULING.value(), processor.getScheduling().value());
+            if (processor.getScheduling().equals(ProcessorSchedulingType.PS)) {
+                processorElem.setAttribute(QUANTUM.value(), Double.toString(processor.getQuantum()));
+            }
             appendTasks(doc, processorElem, processor.getTasks());
             lqnModelRoot.appendChild(processorElem);
         });
