@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 
+import static ca.appsimulations.jlqninterface.utilities.FileHandler.getResourceFile;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @Slf4j
@@ -55,16 +56,6 @@ public class LqnModelWriterTest {
         v.setSchemaSource(new StreamSource(getResourceFile(schemaPath)));
         ValidationResult validationResult = v.validateInstance(new StreamSource(xmlFile));
         softly.assertThat(validationResult.isValid()).as("xml valid against schema").isTrue();
-    }
-
-    public String readResource(String resourceName) throws Exception {
-        return IOUtils.toString(
-                this.getClass().getClassLoader().getResourceAsStream(resourceName),
-                "UTF-8");
-    }
-
-    public File getResourceFile(String resourceName) throws Exception {
-        return new File(this.getClass().getClassLoader().getResource(resourceName).toURI());
     }
 
 }

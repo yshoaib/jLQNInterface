@@ -8,15 +8,28 @@ package ca.appsimulations.jlqninterface.utilities;
  * For details regarding these LQN classes and members refer to LQNS User Manual.
  */
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 
 public class FileHandler {
 
-    public static boolean doesFileExist(String fileName) {
-        File f = new File(fileName);
+    public static boolean fileExists(String filePath) {
+        File f = new File(filePath);
         if (f.exists() && !f.isDirectory()) {
             return true;
         }
         return false;
     }
+
+    public static String readResource(String resourceName) throws Exception {
+        return IOUtils.toString(
+                FileHandler.class.getClassLoader().getResourceAsStream(resourceName),
+                "UTF-8");
+    }
+
+    public static File getResourceFile(String resourceName) throws Exception {
+        return new File(FileHandler.class.getClassLoader().getResource(resourceName).toURI());
+    }
+
 }

@@ -21,4 +21,5 @@ target/
 *.out
 *.lqxo
 
-test-output.lqnx
+/test-output.lqnx
+/input.ps
