@@ -161,10 +161,10 @@ public abstract class AbstractLqnParser extends DefaultHandler {
         this.lqnModel = lqnModel;
     }
 
-    public void parseFile(String filename) throws FileNotFoundException {
+    public void parseFile(String filePath) throws FileNotFoundException {
 
-        if (!FileHandler.doesFileExist(filename)) {
-            throw new java.io.FileNotFoundException("Filename: " + filename + " doesn't exist");
+        if (!FileHandler.fileExists(filePath)) {
+            throw new java.io.FileNotFoundException("Filename: " + filePath + " doesn't exist");
         }
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -174,7 +174,7 @@ public abstract class AbstractLqnParser extends DefaultHandler {
 
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setContentHandler(this);
-            xmlReader.parse(filename);
+            xmlReader.parse(filePath);
         }
         catch (SAXException se) {
             log.debug("[SAX Exception]: " + se.getMessage());

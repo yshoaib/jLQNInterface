@@ -24,8 +24,8 @@ public class LqnSolver {
         StringBuilder strCmd = new StringBuilder();
         Boolean isError = false;
 
-        strCmd.append("lqns ").append(inputPath);
-        log.debug("----Running Solver----");
+        strCmd.append("lqns ").append("-x ").append("-o ").append(xmlOutputFilePath).append(" ").append(inputPath);
+        log.info("----Running lqns ----");
 
         try {
             Process p = Runtime.getRuntime().exec(strCmd.toString());
@@ -75,5 +75,29 @@ public class LqnSolver {
             log.debug("[InterruptedException]: " + intE.getMessage());
         }
         return false;
+    }
+
+    public static boolean savePostScript(String filePath, String outputPath) {
+        boolean result = false;
+        StringBuilder strCmd = new StringBuilder();
+        strCmd.append("lqn2ps ").append("-o ").append(outputPath).append(" ").append(filePath);
+        log.info("----Running lqn2ps ----");
+
+        try {
+            Process p = Runtime.getRuntime().exec(strCmd.toString());
+            p.waitFor();
+
+            if ((p.exitValue() == 0)) {
+                result = true;
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
