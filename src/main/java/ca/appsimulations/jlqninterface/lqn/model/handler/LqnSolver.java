@@ -54,7 +54,7 @@ public class LqnSolver {
                 return false;
             }
 
-            log.debug("Parsing output file: " + xmlOutputFilePath);
+            log.info("Parsing output file: " + xmlOutputFilePath);
 
             try {
                 lqnResultParser.parseFile(xmlOutputFilePath);
