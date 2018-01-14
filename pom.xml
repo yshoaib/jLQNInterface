@@ -3,11 +3,44 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>ca.appsimulations</groupId>
     <artifactId>jLQNInterface</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <name>jLQNInterface</name>
+    <description>Java API to solve, analyze and manipulate Layered Qeueuing Network (LQN) models</description>
+    <url>http://yshoaib.github.io/jLQNInterface</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/yshoaib/jLQNInterface</url>
+        <connection>scm:git:git://github.com/yshoaib/jLQNInterface.git</connection>
+        <developerConnection>scm:git:git@github.com:yshoaib/jLQNInterface</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>yshoaib</id>
+            <name>Yasir Shoaib</name>
+            <email>yasirshoaib@hotmail.com</email>
+            <url>http://www.example.com/jdoe</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+                <role>researcher</role>
+            </roles>
+            <timezone>America/Toronto</timezone>
+        </developer>
+    </developers>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
