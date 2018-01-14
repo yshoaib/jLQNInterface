@@ -21,9 +21,8 @@
     <scm>
         <url>https://github.com/yshoaib/jLQNInterface</url>
         <connection>scm:git:git://github.com/yshoaib/jLQNInterface.git</connection>
-        <developerConnection>scm:git:git@github.com:yshoaib/jLQNInterface</developerConnection>
-      <tag>v1.0.0</tag>
-  </scm>
+        <developerConnection>scm:git:git@github.com:yshoaib/jLQNInterface.git</developerConnection>
+    </scm>
 
     <developers>
         <developer>
