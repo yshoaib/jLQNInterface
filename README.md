@@ -9,7 +9,7 @@ Maven
 <dependency>
     <groupId>ca.appsimulations</groupId>
     <artifactId>jLQNInterface</artifactId>
-    <version>LATEST.VERSION.NUMBER</version>
+    <version>LATEST.RELEASE.VERSION</version>
 </dependency>
 ```
 
