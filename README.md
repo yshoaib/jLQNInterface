@@ -17,6 +17,10 @@ Pre-requisite
 ==============
 jLQNInterface depends on LQN Solver (LQNS), which needs to be installed on the system before jLQNInterface may be used.
 
+Changelog
+==========
+[Changelog](CHANGELOG.md)
+
 Publications
 =========
 Y. Shoaib and O. Das, “Using layered bottlenecks for virtual machine provisioning in the clouds,” in Proceedings of the 2012 IEEE/ACM Fifth International Conference on Utility and Cloud Computing (UCC 2012), Chicago, IL, 5–8 Nov. 2012, pp.109–116. [Online]. Available: 
