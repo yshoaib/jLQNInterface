@@ -13,7 +13,7 @@ Maven
 </dependency>
 ```
 
-Pre-requisite
+Prerequisite
 ==============
 jLQNInterface depends on LQN Solver (LQNS), which needs to be installed on the system before jLQNInterface may be used.
 
