@@ -27,8 +27,6 @@ import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlElements.*
 
 @Slf4j
 public class LqnModelWriter {
-    private static String PREFIX = "xsi";
-
     public static void write(LqnModel lqnModel, String outputPath) {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
@@ -73,6 +71,10 @@ public class LqnModelWriter {
             Element processorElem = doc.createElement(PROCESSOR.value());
             processorElem.setAttribute(NAME.value(), processor.getName());
             processorElem.setAttribute(SCHEDULING.value(), processor.getScheduling().value());
+            if (processor.getMultiplicity() > 1 &&
+                processor.getScheduling().equals(ProcessorSchedulingType.INF) == false) {
+                processorElem.setAttribute(MULTIPLICITY.value(), processor.getMutiplicityString());
+            }
             if (processor.getScheduling().equals(ProcessorSchedulingType.PS)) {
                 processorElem.setAttribute(QUANTUM.value(), Double.toString(processor.getQuantum()));
             }
@@ -158,5 +160,4 @@ public class LqnModelWriter {
             e.printStackTrace();
         }
     }
-
 }
