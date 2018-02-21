@@ -80,7 +80,7 @@ public class LqnSolver {
     public static boolean savePostScript(String filePath, String outputPath) {
         boolean result = false;
         StringBuilder strCmd = new StringBuilder();
-        strCmd.append("lqn2ps ").append("-o ").append(outputPath).append(" ").append(filePath);
+        strCmd.append("lqn2ps ").append("-M 0.35 ").append("-o ").append(outputPath).append(" ").append(filePath);
         log.info("----Running lqn2ps ----");
 
         try {
