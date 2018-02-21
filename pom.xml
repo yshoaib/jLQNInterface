@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ca.appsimulations</groupId>
     <artifactId>jLQNInterface</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>jLQNInterface</name>
@@ -22,7 +22,7 @@
         <url>https://github.com/yshoaib/jLQNInterface</url>
         <connection>scm:git:git://github.com/yshoaib/jLQNInterface.git</connection>
         <developerConnection>scm:git:git@github.com:yshoaib/jLQNInterface.git</developerConnection>
-      <tag>v1.0.0</tag>
+      <tag>v1.0.2</tag>
   </scm>
 
     <developers>
