@@ -52,7 +52,6 @@ public class BottleneckAlgorithm extends Algorithm {
         log.info("Setting up algorithm...");
 
         lqnModel.resetAll();
-        // LqnModel workspace = new LqnModel("./application.properties");
 
         log.debug("Parsing input file " + this.configurationService.inputFilePath());
         try {
@@ -63,9 +62,6 @@ public class BottleneckAlgorithm extends Algorithm {
             fnfe.printStackTrace();
         }
 
-        lqnModel.linkEntries();
-
-        // lqnParser.printProcessors();
         log.debug("Linking entries...");
         log.debug("Building DestTree...");
         lqnModel.buildDestTree();

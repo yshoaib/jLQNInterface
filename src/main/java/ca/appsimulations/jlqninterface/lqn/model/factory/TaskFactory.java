@@ -26,4 +26,24 @@ public class TaskFactory {
         task.setReplication(LqnDefaults.TASK_REPLICATION.getValue());
         return task;
     }
+
+    public static Task build(String name,
+                             LqnModel lqnModel,
+                             Processor processor,
+                             boolean refTask,
+                             int threads,
+                             int replicationCount) {
+        Task task = new Task(lqnModel,
+                             name,
+                             processor);
+        if (refTask) {
+            task.setScheduling(TaskSchedulingType.REF);
+        }
+        else {
+            task.setScheduling(TaskSchedulingType.FIFO);
+        }
+        task.setMultiplicity(threads);
+        task.setReplication(replicationCount);
+        return task;
+    }
 }

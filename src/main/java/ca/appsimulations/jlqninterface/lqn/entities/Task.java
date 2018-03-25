@@ -12,6 +12,8 @@ import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 import ca.appsimulations.jlqninterface.utilities.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Task extends TaskType {
     // private LqnModel workspace;
@@ -26,6 +28,8 @@ public class Task extends TaskType {
     private Task duplicatedFrom = null;
     private ArrayList<Task> duplicates;
     private int duplication = 1;
+    private Map<Task, Integer> fanInMap = new HashMap<>();
+    private Map<Task, Integer> fanOutMap = new HashMap<>();
     private boolean isReplicable = true;
 
     public Task(LqnModel lqnModel) {
@@ -192,6 +196,14 @@ public class Task extends TaskType {
         return this.duplicateDepth(p);
     }
 
+    public void adddFanOut(Task t, int fanOut) {
+        fanOutMap.put(t, fanOut);
+    }
+
+    public void adddFanIn(Task t, int fanIn) {
+        fanInMap.put(t, fanIn);
+    }
+
     public String getInformation() {
         StringBuilder strB = new StringBuilder();
 
@@ -282,5 +294,13 @@ public class Task extends TaskType {
 
     public void setReplicable(boolean isReplicable) {
         this.isReplicable = isReplicable;
+    }
+
+    public Map<Task, Integer> getFanInMap() {
+        return fanInMap;
+    }
+
+    public Map<Task, Integer> getFanOutMap() {
+        return fanOutMap;
     }
 }

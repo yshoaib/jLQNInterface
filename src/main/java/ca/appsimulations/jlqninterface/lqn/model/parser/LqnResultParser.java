@@ -176,8 +176,6 @@ public class LqnResultParser extends AbstractLqnParser {
                 // dest, callsmean, fanin,fanout
                 String attrDest = attributes.getValue(LqnXmlAttributes.DEST.toString());
                 String attrCallsMean = attributes.getValue(LqnXmlAttributes.CALLS_MEAN.toString());
-                String attrFanin = attributes.getValue(LqnXmlAttributes.FANIN.toString());
-                String attrFanout = attributes.getValue(LqnXmlAttributes.FANOUT.toString());
                 double callsMean = Double.parseDouble(attrCallsMean);
 
                 ActivityPhases ap = null;

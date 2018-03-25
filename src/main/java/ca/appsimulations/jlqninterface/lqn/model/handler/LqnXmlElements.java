@@ -24,6 +24,8 @@ public enum LqnXmlElements {
     ENTRY("entry"),
     RESULT_ENTRY("result-entry"),
     ENTRY_PHASE_ACTIVITIES("entry-phase-activities"),
+    FAN_IN("fan-in"),
+    FAN_OUT("fan-out"),
     ACTIVITY("activity"),
     PRECEDENCE("precedence"),
     PRE_OR("pre-OR"),
