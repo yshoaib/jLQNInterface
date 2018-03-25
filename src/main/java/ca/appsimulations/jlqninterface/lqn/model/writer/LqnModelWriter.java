@@ -21,9 +21,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes.*;
 import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlElements.*;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 public class LqnModelWriter {
@@ -78,6 +82,10 @@ public class LqnModelWriter {
             if (processor.getScheduling().equals(ProcessorSchedulingType.PS)) {
                 processorElem.setAttribute(QUANTUM.value(), Double.toString(processor.getQuantum()));
             }
+            if (processor.getReplication() > 1 &&
+                processor.getScheduling().equals(ProcessorSchedulingType.INF) == false) {
+                processorElem.setAttribute(REPLICATION.value(), Integer.toString(processor.getReplication()));
+            }
             appendTasks(doc, processorElem, processor.getTasks());
             lqnModelRoot.appendChild(processorElem);
         });
@@ -89,8 +97,45 @@ public class LqnModelWriter {
             taskElem.setAttribute(NAME.value(), task.getName());
             taskElem.setAttribute(MULTIPLICITY.value(), task.getMutiplicityString());
             taskElem.setAttribute(SCHEDULING.value(), task.getScheduling().value());
+            if (task.getReplication() > 1 && task.isRefTask() == false) {
+                taskElem.setAttribute(REPLICATION.value(), Integer.toString(task.getReplication()));
+            }
             appendEntries(doc, taskElem, task.getEntries());
+            appendFanIn(doc, taskElem, task.getFanInMap());
+            appendFanOut(doc, taskElem, task.getFanOutMap());
+
             processorElem.appendChild(taskElem);
+        });
+    }
+
+    private static void appendFanOut(Document doc, Element taskElem, Map<Task, Integer> fanOutMap) {
+        Map<String, Integer> fanOuts =
+                fanOutMap.entrySet().stream().collect(toMap(entry -> entry.getKey().getName(),
+                                                            entry -> entry.getValue()));
+
+        SortedSet<String> keys = new TreeSet<String>(fanOuts.keySet());
+
+        keys.stream().forEach(key -> {
+            Element fanOutElem = doc.createElement(FAN_OUT.value());
+            fanOutElem.setAttribute(DEST.value(), key);
+            fanOutElem.setAttribute(VALUE.value(), fanOuts.get(key).toString());
+            taskElem.appendChild(fanOutElem);
+        });
+    }
+
+    private static void appendFanIn(Document doc, Element taskElem, Map<Task, Integer> fanInMap) {
+
+        Map<String, Integer> fanIns =
+                fanInMap.entrySet().stream().collect(toMap(entry -> entry.getKey().getName(),
+                                                           entry -> entry.getValue()));
+
+        SortedSet<String> keys = new TreeSet<String>(fanIns.keySet());
+
+        keys.stream().forEach(key -> {
+            Element fanInElem = doc.createElement(FAN_IN.value());
+            fanInElem.setAttribute(SOURCE.value(), key);
+            fanInElem.setAttribute(VALUE.value(), fanIns.get(key).toString());
+            taskElem.appendChild(fanInElem);
         });
     }
 

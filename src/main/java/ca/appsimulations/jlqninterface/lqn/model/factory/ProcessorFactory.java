@@ -26,4 +26,24 @@ public class ProcessorFactory {
         processor.setReplication(LqnDefaults.PROCESSOR_REPLICATION.getValue());
         return processor;
     }
+
+    public static Processor build(LqnModel lqnModel,
+                                  String name,
+                                  boolean refTask,
+                                  int numOfCores,
+                                  int replicationCount) {
+        Processor processor = new Processor(lqnModel,
+                                            name);
+        if (refTask) {
+            processor.setScheduling(ProcessorSchedulingType.INF);
+            processor.setMultiplicity(LqnConstants.INFINITY.getConstantValue());
+        }
+        else {
+            processor.setScheduling(ProcessorSchedulingType.PS);
+            processor.setMultiplicity(numOfCores);
+            processor.setQuantum(0.2);
+        }
+        processor.setReplication(replicationCount);
+        return processor;
+    }
 }

@@ -21,7 +21,7 @@ import static ca.appsimulations.jlqninterface.utilities.FileHandler.getResourceF
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @Slf4j
-public class LqnModelWriterTest {
+public class LqnModelParserAndWriterTest {
     private File outputFile;
     private SoftAssertions softly;
     private final String LQN_XSD = "lqn.xsd";
@@ -36,7 +36,7 @@ public class LqnModelWriterTest {
     }
 
     @Test
-    public void testWriter() throws Exception {
+    public void testParserAndWriter() throws Exception {
 
         LqnModel lqnModel = new LqnModel();
         new LqnInputParser(lqnModel, true).parseFile(getResourceFile(INPUT_LQNX).getAbsolutePath());

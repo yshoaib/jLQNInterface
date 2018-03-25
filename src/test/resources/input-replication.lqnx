@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<lqn-model name="flat" description="lqn2xml 5.7 solution for model from: flat.lqn."
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="file:///C:/Program Files/LQN Solvers/lqn.xsd">
+    <solver-params comment="lqn model" conv_val="0.01" it_limit="75" underrelax_coeff="0.9" print_int="1"/>
+    <processor name="pClient" scheduling="inf">
+        <task name="Browser" scheduling="ref" multiplicity="100">
+            <entry name="load" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity name="load1" phase="1" host-demand-mean="1.0">
+                        <synch-call dest="funcA" calls-mean="1.0"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <fan-out dest="TaskA" value="3"></fan-out>
+        </task>
+    </processor>
+    <processor name="pTaskA" scheduling="ps" quantum="0.2" replication="3">
+        <task name="TaskA" scheduling="fcfs" multiplicity="10" replication="3">
+            <entry name="funcA" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity name="funcA1" phase="1" host-demand-mean="1.0">
+                        <synch-call dest="funcB" calls-mean="1.0"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <fan-in source="Browser" value="1"></fan-in>
+            <fan-out dest="TaskB" value="2"></fan-out>
+        </task>
+    </processor>
+    <processor name="pTaskB" scheduling="ps" quantum="0.2" replication="2">
+        <task name="TaskB" scheduling="fcfs" multiplicity="10" replication="2">
+            <entry name="funcB" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity name="funcB1" phase="1" host-demand-mean="1.0">
+                        <synch-call dest="funcC" calls-mean="1.0"/>
+                        <synch-call dest="funcD" calls-mean="1.0"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <fan-in source="TaskA" value="3"></fan-in>
+            <fan-out dest="TaskC" value="2"></fan-out>
+            <fan-out dest="TaskD" value="1"></fan-out>
+        </task>
+    </processor>
+    <processor name="pTaskC" scheduling="ps" quantum="0.2" replication="2">
+        <task name="TaskC" scheduling="fcfs" multiplicity="10" replication="2">
+            <entry name="funcC" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity name="funcC1" phase="1" host-demand-mean="1.0"/>
+                </entry-phase-activities>
+            </entry>
+            <fan-in source="TaskB" value="2"></fan-in>
+        </task>
+    </processor>
+    <processor name="pTaskD" scheduling="ps" quantum="0.2">
+        <task name="TaskD" scheduling="fcfs" multiplicity="10">
+            <entry name="funcD" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity name="funcD1" phase="1" host-demand-mean="1.0"/>
+                </entry-phase-activities>
+            </entry>
+            <fan-in source="TaskB" value="2"></fan-in>
+        </task>
+    </processor>
+</lqn-model>

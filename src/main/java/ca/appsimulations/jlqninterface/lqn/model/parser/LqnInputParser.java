@@ -6,8 +6,14 @@ import ca.appsimulations.jlqninterface.lqn.model.LqnXmlDetails;
 import ca.appsimulations.jlqninterface.lqn.model.SolverParams;
 import ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes;
 import ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlElements;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ca.appsimulations.jlqninterface.lqn.entities.LqnDefaults.*;
 import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes.*;
@@ -23,6 +29,9 @@ import static ca.appsimulations.jlqninterface.lqn.model.handler.LqnXmlAttributes
 public class LqnInputParser extends AbstractLqnParser {
     private static String XML_NS_URL = "http://www.w3.org/2001/XMLSchema-instance";
 
+    private final List<FanInOut> fanIns = new ArrayList();
+    private final List<FanInOut> fanOuts = new ArrayList();
+
     private final boolean parseProcessors;
 
     public LqnInputParser(LqnModel lqnModel, boolean parseProcessors) {
@@ -33,9 +42,9 @@ public class LqnInputParser extends AbstractLqnParser {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-        LqnXmlElements et = LqnXmlElements.from(qName);
+        LqnXmlElements element = LqnXmlElements.from(qName);
 
-        if (et == null) {
+        if (element == null) {
             return;
         }
 
@@ -43,8 +52,11 @@ public class LqnInputParser extends AbstractLqnParser {
         String attrScheduling = getAttributeValue(attributes, SCHEDULING);
         String attrMultiplicity = getAttributeValue(attributes, MULTIPLICITY);
         String attrReplication = getAttributeValue(attributes, REPLICATION);
+        String attrValue = getAttributeValue(attributes, VALUE);
+        String attrSource = getAttributeValue(attributes, SOURCE);
+        String attrDest = getAttributeValue(attributes, DEST);
 
-        switch (et) {
+        switch (element) {
             case LQN_MODEL:
                 lqnModel.xmlDetails(LqnXmlDetails
                                             .builder()
@@ -112,7 +124,6 @@ public class LqnInputParser extends AbstractLqnParser {
             case TASK:
                 // name
                 curTask = lqnModel.taskByName(attrName, curProcessor, true);
-
                 // scheduling
                 TaskSchedulingType schedulingType = TaskSchedulingType.getValue(attrScheduling);
                 curTask.setScheduling(schedulingType);
@@ -144,9 +155,16 @@ public class LqnInputParser extends AbstractLqnParser {
             case RESULT_TASK:
                 break;
 
+            case FAN_IN:
+                fanIns.add(FanInOut.builder().srcTask(attrSource).destTask(curTask.getName()).count(Integer.parseInt(
+                        attrValue)).build());
+                break;
+            case FAN_OUT:
+                fanOuts.add(FanInOut.builder().srcTask(curTask.getName()).destTask(attrDest).count(Integer.parseInt(
+                        attrValue)).build());
+                break;
             case ENTRY:
                 String attrType = getAttributeValue(attributes, TYPE);
-
                 // name,type
                 curEntry = lqnModel.entryByName(attrName, curTask, true);
                 curEntry.setEntryType(EntryAcType.getValue(attrType));
@@ -204,7 +222,6 @@ public class LqnInputParser extends AbstractLqnParser {
 
             case SYNCH_CALL:
                 // dest, callsmean, fanin,fanout
-                String attrDest = getAttributeValue(attributes, DEST);
                 String attrCallsMean = getAttributeValue(attributes, CALLS_MEAN);
                 String attrFanin = getAttributeValue(attributes, FANIN);
                 String attrFanout = getAttributeValue(attributes, FANOUT);
@@ -251,13 +268,13 @@ public class LqnInputParser extends AbstractLqnParser {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        LqnXmlElements et = LqnXmlElements.from(qName);
+        LqnXmlElements element = LqnXmlElements.from(qName);
 
-        if (et == null) {
+        if (element == null) {
             return;
         }
 
-        switch (et) {
+        switch (element) {
             case PROCESSOR:
                 curProcessor = null;
                 break;
@@ -281,4 +298,32 @@ public class LqnInputParser extends AbstractLqnParser {
                 break;
         }
     }
+
+    @Override
+    public void endDocument() throws SAXException {
+        lqnModel.linkEntries();
+
+        fanIns.stream().forEach(fanInOut -> {
+            Task srcTask = lqnModel.taskByName(fanInOut.srcTask());
+            Task destTask = lqnModel.taskByName(fanInOut.destTask());
+            destTask.adddFanIn(srcTask, fanInOut.count());
+        });
+
+
+        fanOuts.stream().forEach(fanInOut -> {
+            Task srcTask = lqnModel.taskByName(fanInOut.srcTask());
+            Task destTask = lqnModel.taskByName(fanInOut.destTask());
+            srcTask.adddFanOut(destTask, fanInOut.count());
+        });
+    }
+
+    @Builder
+    @Data
+    @Accessors(fluent = true, chain = true)
+    private static class FanInOut {
+        private String srcTask;
+        private String destTask;
+        private int count;
+    }
+
 }
