@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.4] - 2018-04-09
+### Changes
+- Support lqn replication (fan-in and fan-out)
+
 ## [1.0.2] - 2018-02-20
 ### Changes
 - Save postscript now has magnification set to 0.35
