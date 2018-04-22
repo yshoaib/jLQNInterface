@@ -203,7 +203,7 @@ public class BottleneckIdentifier {
             for (Entry e : t.getEntries()) {
                 ActivityPhases ap = (ActivityPhases) e.getActivityAtPhase(1);
                 double rTime = ap.getResult().getService_time();
-                double tThinTime = t.getThink_time();
+                double tThinTime = ap.getThinkTime();
                 double sTime = ap.getHost_demand_mean();
                 double through = t.getResult().getThroughput();
                 double util = t.getResult().getUtilization();

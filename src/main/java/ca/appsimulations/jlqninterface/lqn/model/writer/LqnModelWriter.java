@@ -162,6 +162,9 @@ public class LqnModelWriter {
         activityElem.setAttribute(NAME.value(), activity.getName());
         activityElem.setAttribute(PHASE.value(), Integer.toString(activity.getPhase()));
         activityElem.setAttribute(HOST_DEMAND_MEAN.value(), Double.toString(activity.getHost_demand_mean()));
+        if (activity.getThinkTime() > 0) {
+            activityElem.setAttribute(THINK_TIME.value(), Double.toString(activity.getThinkTime()));
+        }
         appendSynchCalls(doc, activityElem, activity);
         entryPhaseElem.appendChild(activityElem);
     }

@@ -19,7 +19,6 @@ public abstract class TaskType extends Entity {
     protected int replication = 1;
     protected TaskSchedulingType scheduling = TaskSchedulingType.FIFO;
     protected TaskSubClass subclass;
-    protected double think_time = 0;
     protected int priority = 0;
     protected int queue_length = 0;
     protected boolean activity_graph;
@@ -72,14 +71,7 @@ public abstract class TaskType extends Entity {
     public void setScheduling(TaskSchedulingType scheduling) {
         this.scheduling = scheduling;
     }
-
-    public double getThink_time() {
-        return think_time;
-    }
-
-    public void setThink_time(double thinkTime) {
-        think_time = thinkTime;
-    }
+    
 
     public int getPriority() {
         return priority;

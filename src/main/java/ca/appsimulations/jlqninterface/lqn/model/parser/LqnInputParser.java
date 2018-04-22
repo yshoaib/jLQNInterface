@@ -216,6 +216,12 @@ public class LqnInputParser extends AbstractLqnParser {
                     curActivity.setHost_demand_mean(hostDemand);
                 }
 
+                String attrThinkTime = getAttributeValue(attributes, THINK_TIME);
+                if (attrThinkTime != null) {
+                    curActivity.setThinkTime(Double.parseDouble(attrThinkTime));
+                }
+
+
                 break;
             case RESULT_ACTIVITY:
                 break;

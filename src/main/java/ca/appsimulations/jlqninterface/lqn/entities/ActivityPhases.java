@@ -35,7 +35,7 @@ public class ActivityPhases extends ActivityPhasesType {
         ap.duplicateFrom = this.name;
         ap.host_demand_mean = this.host_demand_mean;
         ap.host_demand_cvsq = this.host_demand_cvsq;
-        ap.think_time = this.think_time;
+        ap.thinkTime = this.thinkTime;
         ap.max_service_time = this.max_service_time;
         ap.call_order = this.call_order;
 
