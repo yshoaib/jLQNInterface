@@ -8,7 +8,7 @@
         <task name="Browser" scheduling="ref" multiplicity="100">
             <entry name="load" type="PH1PH2">
                 <entry-phase-activities>
-                    <activity name="load_1" phase="1" host-demand-mean="2.0">
+                    <activity name="load_1" phase="1" host-demand-mean="2.0" think-time="5.0">
                         <synch-call dest="funcA1" calls-mean="1.0"/>
                     </activity>
                 </entry-phase-activities>

@@ -52,6 +52,7 @@ public enum LqnXmlAttributes {
     WAITING("waiting"),
     WAITING_VARIANCE("waiting-variance"),
     BOUND_TO_ENTRY("bound-to-entry"),
+    THINK_TIME("think-time"),
     VALID("valid");
 
     private String value;

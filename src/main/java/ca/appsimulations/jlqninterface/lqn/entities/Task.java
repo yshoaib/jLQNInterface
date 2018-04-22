@@ -159,7 +159,6 @@ public class Task extends TaskType {
         t.multiplicity = dupParent.multiplicity;
         t.replication = dupParent.replication;
         t.duplication = dupParent.duplication;
-        t.think_time = dupParent.think_time;
         t.subclass = dupParent.subclass;
         t.sat = dupParent.sat;
         t.scheduling = dupParent.scheduling;
@@ -212,7 +211,6 @@ public class Task extends TaskType {
         strB.append("\t multiplicty: " + this.multiplicity + "\n");
         strB.append("\t replication: " + this.replication + "\n");
         strB.append("\t duplication: " + this.duplication + "\n");
-        strB.append("\t think_time: " + this.think_time + "\n");
         strB.append("\t sub_class: " + this.subclass + "\n");
         strB.append("\t sat: " + this.sat + "\n");
         strB.append("\t scheduling: " + this.scheduling + "\n");

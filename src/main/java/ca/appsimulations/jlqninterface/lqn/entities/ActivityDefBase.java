@@ -15,7 +15,7 @@ public abstract class ActivityDefBase extends Entity {
     protected String name;
     protected double host_demand_mean;
     protected double host_demand_cvsq = 1.0f;
-    protected double think_time = 0.0f;
+    protected double thinkTime = 0.0f;
     protected double max_service_time = 0.0f;
     protected CallOrderType call_order = CallOrderType.STOCHASTIC;
 
@@ -49,12 +49,12 @@ public abstract class ActivityDefBase extends Entity {
         host_demand_cvsq = hostDemandCvsq;
     }
 
-    public double getThink_time() {
-        return think_time;
+    public double getThinkTime() {
+        return thinkTime;
     }
 
-    public void setThink_time(double thinkTime) {
-        think_time = thinkTime;
+    public void setThinkTime(double thinkTime) {
+        this.thinkTime = thinkTime;
     }
 
     public double getMax_service_time() {
